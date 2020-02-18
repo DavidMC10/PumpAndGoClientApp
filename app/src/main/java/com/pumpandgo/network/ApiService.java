@@ -24,5 +24,9 @@ public interface ApiService {
 
     @POST("visitcount")
     @FormUrlEncoded
-    Call<AccessToken> visitcount();
+    Call<AccessToken> visitCount();
+
+    @POST("getnearbystations")
+    @FormUrlEncoded
+    Call<AccessToken> getNearbyStations();
 }
