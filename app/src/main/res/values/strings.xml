@@ -1,0 +1,44 @@
+<resources>
+    <string name="app_name">PumpAndGoApplication</string>
+
+    <!--activity_login strings-->
+    <string name="login_email_address_hint">EMAIL ADDRESS</string>
+    <string name="login_password_hint">PASSWORD</string>
+    <string name="login_button_title">SIGN IN</string>
+    <string name="login_return_forgot_password_title">Forgotten Password?</string>
+    <string name="login_register_hint">Need an account?</string>
+    <string name="login_return_register_title">Register today.</string>
+
+    <!--activity_forgotpassword strings-->
+    <string name="forgot_password_title">Create new password</string>
+    <string name="forgot_password_text">To reset your password, please enter your email address below and follow the instructions in the email that we send you</string>
+    <string name="forgot_password_email_address_hint">EMAIL ADDRESS</string>
+    <string name="forgot_password_button_title">SEND RESET LINK</string>
+
+    <!--activity_signup strings-->
+    <string name="register_first_name_title">FIRST NAME:</string>
+    <string name="register_first_name_hint">John</string>
+    <string name="register_last_name_title">LAST NAME:</string>
+    <string name="register_last_name_hint">Smith</string>
+    <string name="register_email_address_title">EMAIL ADDRESS:</string>
+    <string name="register_email_address_hint">johnsmith@gmail.com</string>
+    <string name="register_password_title">PASSWORD:</string>
+    <string name="register_password_hint">Password</string>
+    <string name="register_confirm_password_title">CONFIRM PASSWORD:</string>
+    <string name="register_confirm_password_hint">Confirm Password</string>
+    <string name="register_button_title">REGISTER</string>
+    <string name="register_need_account_title">Need an account?</string>
+    <string name="register_return_login_title">Login Here</string>
+
+    <!--nav_menu strings-->
+    <string name="nav_menu_purchase_fuel">Purchase Fuel</string>
+    <string name="nav_menu_nearby_stations">Nearby Stations</string>
+    <string name="nav_menu_rewards">Rewards</string>
+    <string name="nav_menu_transactions">Transactions</string>
+    <string name="nav_menu_settings">Settings</string>
+
+    <!-- Validation Errors -->
+    <string name="err_name">The name field is required.</string>
+    <string name="err_email">The email must be a valid email address.</string>
+    <string name="err_password">The password must be at least 6 characters.</string>
+</resources>

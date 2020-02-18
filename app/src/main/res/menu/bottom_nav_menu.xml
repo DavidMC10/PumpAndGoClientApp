@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigationPurchaseFuel"
+        android:title="@string/nav_menu_purchase_fuel"
+        android:icon="@drawable/ic_filling_station_24px"/>
+
+    <item
+        android:id="@+id/navigationNearbyStations"
+        android:title="@string/nav_menu_nearby_stations"
+        android:icon="@drawable/ic_map_marker_24px"/>
+
+    <item
+        android:id="@+id/navigationRewards"
+        android:title="@string/nav_menu_rewards"
+        android:icon="@drawable/ic_reward_24px"/>
+
+    <item
+        android:id="@+id/navigationTransactionHistory"
+        android:title="@string/nav_menu_transactions"
+        android:icon="@drawable/ic_transactions_24px"/>
+
+    <item
+        android:id="@+id/navigationSettings"
+        android:title="@string/nav_menu_settings"
+        android:icon="@drawable/ic_settings_24px"/>
+
+</menu>
