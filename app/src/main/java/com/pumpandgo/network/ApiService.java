@@ -1,6 +1,7 @@
 package com.pumpandgo.network;
 
 import com.pumpandgo.entities.AccessToken;
+import com.pumpandgo.entities.VisitCount;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -23,8 +24,7 @@ public interface ApiService {
     Call<AccessToken> refresh(@Field("refresh_token") String refreshToken);
 
     @POST("visitcount")
-    @FormUrlEncoded
-    Call<AccessToken> visitCount();
+    Call<VisitCount> visitCount();
 
     @POST("getnearbystations")
     @FormUrlEncoded

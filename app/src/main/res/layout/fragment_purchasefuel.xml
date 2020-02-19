@@ -1,13 +1,56 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/textViewTitle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:textSize="24sp"
-        android:textColor="@color/colorAccent"
-        android:text="Purchase Fuel" />
+        android:fontFamily="@font/open_sans"
+        android:gravity="center"
+        android:text="Good Afternoon"
+        android:textColor="#000000"
+        android:textColorHint="#CCCCCC"
+        android:textSize="36sp" />
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/textViewUserFirstName"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fontFamily="@font/open_sans"
+        android:gravity="center"
+        android:text="David"
+        android:textColor="#000000"
+        android:textColorHint="#CCCCCC"
+        android:textSize="26sp" />
+
+    <TextView
+        android:id="@+id/textViewVisitCount"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fontFamily="@font/open_sans_bold"
+        android:gravity="center"
+        android:text="7 visits to go"
+        android:textColor="@color/colorAccent"
+        android:textSize="26sp" />
+
+    <TextView
+        android:id="@+id/textViewEndingText"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/textViewVisitCount"
+        android:fontFamily="@font/open_sans"
+        android:gravity="center"
+        android:text="to unlock your fuel reward"
+        android:textColor="@color/colorAccent"
+        android:textSize="24sp" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+</FrameLayout>
