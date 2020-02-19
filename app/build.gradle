@@ -49,7 +49,7 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.0.0'
 
     // Awesome Validation
-    implementation 'com.basgeekball:awesome-validation:2.0'
+    implementation 'com.basgeekball:awesome-validation:4.2'
 
     // Stripe
     implementation 'com.stripe:stripe-android:13.2.0'

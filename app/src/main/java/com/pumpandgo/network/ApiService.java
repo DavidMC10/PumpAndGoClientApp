@@ -12,7 +12,7 @@ public interface ApiService {
 
     @POST("register")
     @FormUrlEncoded
-    Call<AccessToken> register(@Field("name") String name, @Field("email") String email, @Field("password") String password);
+    Call<AccessToken> register(@Field("first_name") String firstName, @Field("last_name") String lastName, @Field("email") String email, @Field("password") String password);
 
     @POST("login")
     @FormUrlEncoded

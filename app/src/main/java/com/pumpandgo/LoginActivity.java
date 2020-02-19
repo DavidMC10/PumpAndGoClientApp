@@ -5,21 +5,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.transition.TransitionManager;
 
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
-import com.basgeekball.awesomevalidation.utility.RegexTemplate;
-import com.google.android.material.textfield.TextInputLayout;
 import com.pumpandgo.entities.AccessToken;
 import com.pumpandgo.entities.ApiError;
 import com.pumpandgo.network.ApiService;
@@ -41,13 +34,9 @@ public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
 
     @BindView(R.id.editTextEmail)
-    EditText tilEmail;
+    EditText emailText;
     @BindView(R.id.editTextPassword)
-    EditText tilPassword;
-    //    @BindView(R.id.loginContents)
-//    LinearLayout container;
-//    @BindView(R.id.buttonSignIn)
-//    Button formContainer;
+    EditText passwordText;
     @BindView(R.id.progressBar)
     ProgressBar loader;
 
@@ -65,73 +54,68 @@ public class LoginActivity extends AppCompatActivity {
 
         service = RetrofitBuilder.createService(ApiService.class);
         tokenManager = TokenManager.getInstance(getSharedPreferences("prefs", MODE_PRIVATE));
-
+        validator = new AwesomeValidation(ValidationStyle.BASIC);
+        setupRules();
         if (tokenManager.getToken().getAccessToken() != null) {
-            startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+            startActivity(new Intent(LoginActivity.this, HomeActivity.class));
             finish();
         }
     }
 
-    private void showLoading() {
-//        TransitionManager.beginDelayedTransition(container);
-//        formContainer.setVisibility(View.GONE);
-        loader.setVisibility(View.VISIBLE);
-    }
-
-    private void showForm() {
-//        TransitionManager.beginDelayedTransition(container);
-//        formContainer.setVisibility(View.VISIBLE);
-        loader.setVisibility(View.GONE);
-    }
-
-
     @OnClick(R.id.buttonSignIn)
     void login() {
+        String email = emailText.getText().toString();
+        String password = passwordText.getText().toString();
 
-        String email = tilEmail.getText().toString();
-        System.out.println(email);
-        String password = tilPassword.getText().toString();
+//        emailText.setError(null);
+//        passwordText.setError(null);
 
-        tilEmail.setError(null);
-        tilPassword.setError(null);
+        if (validator.validate()) {
+            loader.setVisibility(View.VISIBLE);
+            call = service.login(email, password);
+            call.enqueue(new Callback<AccessToken>() {
+                @Override
+                public void onResponse(Call<AccessToken> call, Response<AccessToken> response) {
 
-        loader.setVisibility(View.VISIBLE);
-        call = service.login(email, password);
-        call.enqueue(new Callback<AccessToken>() {
-            @Override
-            public void onResponse(Call<AccessToken> call, Response<AccessToken> response) {
+                    Log.w(TAG, "onResponse: " + response);
 
-                Log.w(TAG, "onResponse: " + response);
-
-                if (response.isSuccessful()) {
-                    tokenManager.saveToken(response.body());
-                    startActivity(new Intent(LoginActivity.this, LoginActivity.class));
-                    finish();
-                } else {
-                    if (response.code() == 422) {
-                        handleErrors(response.errorBody());
+                    if (response.isSuccessful()) {
+                        tokenManager.saveToken(response.body());
+                        startActivity(new Intent(LoginActivity.this, LoginActivity.class));
+                        finish();
+                    } else {
+                        if (response.code() == 422) {
+                            handleErrors(response.errorBody());
+                        }
+                        if (response.code() == 401) {
+                            ApiError apiError = Utils.converErrors(response.errorBody());
+                            Toast.makeText(LoginActivity.this, apiError.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                        loader.setVisibility(View.INVISIBLE);
                     }
-                    if (response.code() == 401) {
-                        ApiError apiError = Utils.converErrors(response.errorBody());
-                        Toast.makeText(LoginActivity.this, apiError.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                    loader.setVisibility(View.INVISIBLE);
                 }
 
-            }
-
-            @Override
-            public void onFailure(Call<AccessToken> call, Throwable t) {
-                Log.w(TAG, "onFailure: " + t.getMessage());
-                showForm();
-            }
-        });
+                @Override
+                public void onFailure(Call<AccessToken> call, Throwable t) {
+                    Log.w(TAG, "onFailure: " + t.getMessage());
+                    loader.setVisibility(View.INVISIBLE);
+                }
+            });
+        }
     }
 
+    // Loads the register activity.
     @OnClick(R.id.textViewRegister)
     void goToRegister() {
         System.out.print("test");
         startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+    }
+
+    // Sets validation rules.
+    public void setupRules() {
+
+        validator.addValidation(this, R.id.editTextEmail, Patterns.EMAIL_ADDRESS, R.string.err_email);
+        validator.addValidation(this, R.id.editTextPassword, "[a-zA-Z0-9]{6,}", R.string.err_password);
     }
 
     private void handleErrors(ResponseBody response) {
@@ -140,10 +124,10 @@ public class LoginActivity extends AppCompatActivity {
 
         for (Map.Entry<String, List<String>> error : apiError.getErrors().entrySet()) {
             if (error.getKey().equals("email")) {
-                tilEmail.setError(error.getValue().get(0));
+                emailText.setError(error.getValue().get(0));
             }
             if (error.getKey().equals("password")) {
-                tilPassword.setError(error.getValue().get(0));
+                passwordText.setError(error.getValue().get(0));
             }
         }
     }
@@ -153,6 +137,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    // Cancels any api calls when LoginActivity is destroyed.
     @Override
     protected void onDestroy() {
         super.onDestroy();
