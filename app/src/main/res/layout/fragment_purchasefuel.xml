@@ -3,48 +3,54 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/textViewTitle"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fontFamily="@font/open_sans"
-        android:gravity="center"
-        android:text="Good Afternoon"
-        android:textColor="#000000"
-        android:textColorHint="#CCCCCC"
-        android:textSize="36sp" />
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textViewUserFirstName"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fontFamily="@font/open_sans"
-        android:gravity="center"
-        android:text="David"
-        android:textColor="#000000"
-        android:textColorHint="#CCCCCC"
-        android:textSize="26sp" />
+        <TextView
+            android:id="@+id/textViewTitle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/open_sans"
+            android:gravity="center"
+            android:text="Good Afternoon"
+            android:textColor="#000000"
+            android:textColorHint="#CCCCCC"
+            android:textSize="36sp" />
 
-    <TextView
-        android:id="@+id/textViewVisitCount"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fontFamily="@font/open_sans_bold"
-        android:gravity="center"
-        android:text="7 visits to go"
-        android:textColor="@color/colorAccent"
-        android:textSize="26sp" />
+        <TextView
+            android:id="@+id/textViewUserFirstName"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/open_sans"
+            android:gravity="center"
+            android:text="David"
+            android:textColor="#000000"
+            android:textColorHint="#CCCCCC"
+            android:textSize="26sp" />
 
-    <TextView
-        android:id="@+id/textViewEndingText"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/textViewVisitCount"
-        android:fontFamily="@font/open_sans"
-        android:gravity="center"
-        android:text="to unlock your fuel reward"
-        android:textColor="@color/colorAccent"
-        android:textSize="24sp" />
+        <TextView
+            android:id="@+id/textViewVisitCount"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/open_sans_bold"
+            android:gravity="center"
+            android:text="7 visits to go"
+            android:textColor="@color/colorAccent"
+            android:textSize="26sp" />
+
+        <TextView
+            android:id="@+id/textViewEndingText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/textViewVisitCount"
+            android:fontFamily="@font/open_sans"
+            android:gravity="center"
+            android:text="to unlock your fuel reward"
+            android:textColor="@color/colorAccent"
+            android:textSize="24sp" />
+    </LinearLayout>
 
     <ProgressBar
         android:id="@+id/progressBar"

@@ -47,7 +47,7 @@ public class PurchaseFuelFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_purchasefuel, null);
+        View view = inflater.inflate(R.layout.fragment_purchasefuel, container, false);
         ButterKnife.bind(this, view);
 
         tokenManager = TokenManager.getInstance(this.getActivity().getSharedPreferences("prefs", MODE_PRIVATE));
