@@ -30,6 +30,10 @@
     <string name="register_need_account_title">Need an account?</string>
     <string name="register_return_login_title">Login Here</string>
 
+    <!--fragment_locatingstation strings-->
+    <string name="locatingstation_locating">Locating</string>
+    <string name="locatingstation_station">Your Filling Station</string>
+
     <!--nav_menu strings-->
     <string name="nav_menu_purchase_fuel">Purchase Fuel</string>
     <string name="nav_menu_nearby_stations">Nearby Stations</string>

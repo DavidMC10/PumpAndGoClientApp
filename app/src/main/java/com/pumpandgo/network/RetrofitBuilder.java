@@ -14,7 +14,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory;
 
 public class RetrofitBuilder {
 
-    private static final String BASE_URL = "http://pumpandgo.net/api/";
+    private static final String BASE_URL = "https://pumpandgo.net/api/";
 
     private final static OkHttpClient client = buildClient();
     private final static Retrofit retrofit = buildRetrofit(client);

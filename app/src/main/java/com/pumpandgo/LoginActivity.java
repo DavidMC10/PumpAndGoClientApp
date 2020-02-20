@@ -60,6 +60,7 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(new Intent(LoginActivity.this, HomeActivity.class));
             finish();
         }
+
     }
 
     @OnClick(R.id.buttonSignIn)
@@ -107,7 +108,6 @@ public class LoginActivity extends AppCompatActivity {
     // Loads the register activity.
     @OnClick(R.id.textViewRegister)
     void goToRegister() {
-        System.out.print("test");
         startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
     }
 

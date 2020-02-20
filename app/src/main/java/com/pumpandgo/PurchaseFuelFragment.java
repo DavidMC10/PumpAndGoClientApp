@@ -18,6 +18,7 @@ import com.pumpandgo.network.RetrofitBuilder;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -93,6 +94,15 @@ public class PurchaseFuelFragment extends Fragment {
                 Log.w(TAG, "onFailure: " + t.getMessage());
             }
         });
+    }
+
+    // Loads the register activity.
+    @OnClick(R.id.paymentGraphic)
+    void goToLocatingStation() {
+        System.out.println("test");
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.navigationPurchaseFuel, new LocatingStationFragment())
+                .commit();
     }
 
 }
