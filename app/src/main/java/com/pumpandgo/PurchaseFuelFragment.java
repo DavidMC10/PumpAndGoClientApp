@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.pumpandgo.entities.VisitCount;
 import com.pumpandgo.network.ApiService;
@@ -49,19 +50,16 @@ public class PurchaseFuelFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_purchasefuel, container, false);
-        ButterKnife.bind(this, view);
 
+        ButterKnife.bind(this, view);
         tokenManager = TokenManager.getInstance(this.getActivity().getSharedPreferences("prefs", MODE_PRIVATE));
+        service = RetrofitBuilder.createServiceWithAuth(ApiService.class, tokenManager);
 
         if (tokenManager.getToken() == null) {
             startActivity(new Intent(getActivity(), LoginActivity.class));
             getActivity().finish();
         }
-
-        service = RetrofitBuilder.createServiceWithAuth(ApiService.class, tokenManager);
-
         getVisitCount();
-
         // Inflates the layout.
         return view;
     }
@@ -70,18 +68,17 @@ public class PurchaseFuelFragment extends Fragment {
         loader.setVisibility(View.VISIBLE);
         call = service.visitCount();
         call.enqueue(new Callback<VisitCount>() {
+
             @Override
             public void onResponse(Call<VisitCount> call, Response<VisitCount> response) {
                 Log.w(TAG, "onResponse: " + response);
 
                 if (response.isSuccessful()) {
-                    System.out.println("success");
-                    System.out.println("success");
                     loader.setVisibility(View.INVISIBLE);
                     titleTextView.setText("Good Afternoon");
                     userFirstNameTextView.setText(response.body().getFirstName());
                     visitCountTextView.setText(String.valueOf(response.body().getVisitCount()) + " visits to go");
-                    endingTextTextView.setText( "to unlock your fuel reward");
+                    endingTextTextView.setText("to unlock your fuel reward");
                 } else {
                     tokenManager.deleteToken();
                     startActivity(new Intent(getActivity(), LoginActivity.class));
@@ -98,11 +95,8 @@ public class PurchaseFuelFragment extends Fragment {
 
     // Loads the register activity.
     @OnClick(R.id.paymentGraphic)
-    void goToLocatingStation() {
-        System.out.println("test");
-        getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.navigationPurchaseFuel, new LocatingStationFragment())
-                .commit();
+    void goToLocatingStationActivity() {
+        Intent intent = new Intent(getActivity(), LocatingStationActivity.class);
+        startActivity(intent);
     }
-
 }

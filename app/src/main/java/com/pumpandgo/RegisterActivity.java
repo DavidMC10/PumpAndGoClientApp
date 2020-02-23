@@ -57,7 +57,6 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_signup);
 
         ButterKnife.bind(this);
-
         service = RetrofitBuilder.createService(ApiService.class);
         validator = new AwesomeValidation(ValidationStyle.BASIC);
         tokenManager = TokenManager.getInstance(getSharedPreferences("prefs", MODE_PRIVATE));
@@ -72,17 +71,13 @@ public class RegisterActivity extends AppCompatActivity {
     @OnClick(R.id.buttonSignup)
     void register(){
 
+        // Gets the data from the textfields.
         String firstName = firstNameText.getText().toString();
         String lastName = lastNameText.getText().toString();
         String email = editTextEmail.getText().toString();
         String password = editTextPassword.getText().toString();
         String confirmPassword = editTextConfirmPassword.getText().toString();
-//
-//        tilName.setError(null);
-//        tilEmail.setError(null);
-//        tilPassword.setError(null);
-//
-//        validator.clear();
+
 
         if(validator.validate()) {
             loader.setVisibility(View.VISIBLE);
@@ -112,6 +107,8 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
+
+    // Allows the user to go to the login activity.
     @OnClick(R.id.textViewRegister)
     void goToLogin(){
         startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
@@ -139,6 +136,8 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
+
+    // Sets validation rules.
     public void setupRules(){
         validator.addValidation(this, R.id.editTextFirstname, RegexTemplate.NOT_EMPTY, R.string.err_name);
         validator.addValidation(this, R.id.editTextLastname, RegexTemplate.NOT_EMPTY, R.string.err_name);
@@ -147,6 +146,7 @@ public class RegisterActivity extends AppCompatActivity {
         validator.addValidation(this, R.id.editTextConfirmPassword, R.id.editTextPassword, R.string.err_confirm_password);
     }
 
+    // Cancels any api calls when the activity is destroyed.
     @Override
     protected void onDestroy() {
         super.onDestroy();

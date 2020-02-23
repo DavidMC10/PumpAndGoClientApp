@@ -33,6 +33,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "LoginActivity";
 
+    // Bind variables from view.
     @BindView(R.id.editTextEmail)
     EditText emailText;
     @BindView(R.id.editTextPassword)
@@ -51,7 +52,6 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         ButterKnife.bind(this);
-
         service = RetrofitBuilder.createService(ApiService.class);
         tokenManager = TokenManager.getInstance(getSharedPreferences("prefs", MODE_PRIVATE));
         validator = new AwesomeValidation(ValidationStyle.BASIC);
@@ -63,13 +63,11 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    // Allows the user to login.
     @OnClick(R.id.buttonSignIn)
     void login() {
         String email = emailText.getText().toString();
         String password = passwordText.getText().toString();
-
-//        emailText.setError(null);
-//        passwordText.setError(null);
 
         if (validator.validate()) {
             loader.setVisibility(View.VISIBLE);
@@ -82,7 +80,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     if (response.isSuccessful()) {
                         tokenManager.saveToken(response.body());
-                        startActivity(new Intent(LoginActivity.this, LoginActivity.class));
+                        startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                         finish();
                     } else {
                         if (response.code() == 422) {
@@ -132,12 +130,13 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    // Allows the user to go to the register activity.
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    // Cancels any api calls when LoginActivity is destroyed.
+    // Cancels any api calls when the activity is destroyed.
     @Override
     protected void onDestroy() {
         super.onDestroy();

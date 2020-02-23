@@ -34,6 +34,21 @@
     <string name="locatingstation_locating">Locating</string>
     <string name="locatingstation_station">Your Filling Station</string>
 
+    <!--fragment_settings strings-->
+    <string name="settings_fragment_title">Settings</string>
+    <string name="settings_fragment_edit">Edit</string>
+    <string name="settings_user_profile_title">User Profile</string>
+    <string name="settings_user_name_title">Full Name</string>
+    <string name="settings_user_password_title">Password</string>
+    <string name="settings_user_payment_title">Payment Methods</string>
+    <string name="settings_user_fuelling_amount_title">Maximum Fuelling Amount</string>
+    <string name="settings_user_distance_title">Maximum Distance</string>
+    <string name="settings_user_log_out_title">Log Out</string>
+
+    <!--layout_fuelstations strings-->
+    <string name="fuelstations_opening_hours_title">Opening Hours</string>
+    <string name="fuelstations_directions_button_name">Start</string>
+
     <!--nav_menu strings-->
     <string name="nav_menu_purchase_fuel">Purchase Fuel</string>
     <string name="nav_menu_nearby_stations">Nearby Stations</string>
