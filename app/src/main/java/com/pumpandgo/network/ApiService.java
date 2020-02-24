@@ -1,8 +1,8 @@
 package com.pumpandgo.network;
 
 import com.pumpandgo.entities.AccessToken;
-import com.pumpandgo.entities.FuelStation;
 import com.pumpandgo.entities.FuelStationResponse;
+import com.pumpandgo.entities.LocatingStationResponse;
 import com.pumpandgo.entities.PaymentTest;
 import com.pumpandgo.entities.UserDetails;
 import com.pumpandgo.entities.VisitCount;
@@ -32,6 +32,10 @@ public interface ApiService {
     @POST("testing")
     @FormUrlEncoded
     Call<PaymentTest> paymentTest(@Field("token_id") String token_id);
+
+    @POST("testing")
+    @FormUrlEncoded
+    Call<LocatingStationResponse> checkIfAtFuelStation(@Field("latitude") double latitude, @Field("longitude") double longitude);
 
     @POST("getuserprofiledetails")
     Call<UserDetails> getUserProfileDetails();

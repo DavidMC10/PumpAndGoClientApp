@@ -21,7 +21,7 @@ import com.google.android.gms.location.FusedLocationProviderApi;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.pumpandgo.entities.VisitCount;
+import com.pumpandgo.entities.LocatingStationResponse;
 import com.pumpandgo.network.ApiService;
 import com.pumpandgo.network.RetrofitBuilder;
 
@@ -37,23 +37,22 @@ public class LocatingStationActivity extends AppCompatActivity implements Google
 
     ApiService service;
     TokenManager tokenManager;
-    Call<VisitCount> call;
+    Call<LocatingStationResponse> call;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_locatingstation);
 
-//        ButterKnife.bind(this);
         tokenManager = TokenManager.getInstance(getSharedPreferences("prefs", MODE_PRIVATE));
         service = RetrofitBuilder.createServiceWithAuth(ApiService.class, tokenManager);
-//        locationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
         if (tokenManager.getToken() == null) {
             startActivity(new Intent(this, LoginActivity.class));
             finish();
         }
-        //Building a instance of Google Api Client
+
+        // Building a instance of Google Api Client.
         googleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(LocationServices.API)
                 .addOnConnectionFailedListener(this)
@@ -64,22 +63,21 @@ public class LocatingStationActivity extends AppCompatActivity implements Google
 
     public void onStart() {
         super.onStart();
-        // Initiating the GoogleApiClient Connection when the activity is visible
+        // Initiating the GoogleApiClient Connection when the activity is visible.
         googleApiClient.connect();
     }
 
     public void onStop() {
         super.onStop();
-        //Disconnecting the GoogleApiClient when the activity goes invisible
+        // Disconnecting the GoogleApiClient when the activity goes invisible.
         googleApiClient.disconnect();
     }
 
-    /*
-    This callback is invoked when the GoogleApiClient is successfully connected
-    */
+
+    // This callback is invoked when the GoogleApiClient is successfully connected.
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        //We set a listener to our button only when the ApiClient is connected successfully
+        // We set a listener to our button only when the ApiClient is connected successfully
         getCurrentLocation();
     }
 
@@ -120,16 +118,28 @@ public class LocatingStationActivity extends AppCompatActivity implements Google
             ActivityCompat.requestPermissions(this, new String[]{
                     Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION
             }, LOCATION_REQUEST);
-            locationAlertDialog();
+//            locationAlertDialog();
+            Log.d("test", "losdsadasdsad" +
+                    "" +
+                    "" +
+                    "" +
+                    "" +
+                    "" +
+                    "" +
+                    "" +
+                    "" +
+                    "" +
+                    "");
         }
         //Fetching location using FusedLOcationProviderAPI
         FusedLocationProviderApi fusedLocationApi = LocationServices.FusedLocationApi;
         Location location = fusedLocationApi.getLastLocation(googleApiClient);
         //In some rare cases Location obtained can be null
         if (location == null) {
-            locationAlertDialog();
+//            locationAlertDialog();
             Log.d("test", "Not able to fetch location");
         } else {
+            checkIfAtFuelStation(location.getLatitude(), location.getLongitude());
             Log.d("Location co-ord are ", location.getLatitude() + "," + location.getLongitude());
         }
     }
@@ -148,16 +158,21 @@ public class LocatingStationActivity extends AppCompatActivity implements Google
         Log.d("test", "Connection failed");
     }
 
-    public void checkIfAtFuelStation() {
-        call = service.visitCount();
-        call.enqueue(new Callback<VisitCount>() {
+    public void checkIfAtFuelStation(double latitude, double longitude) {
+        call = service.checkIfAtFuelStation(latitude, longitude);
+        call.enqueue(new Callback<LocatingStationResponse>() {
 
             @Override
-            public void onResponse(Call<VisitCount> call, Response<VisitCount> response) {
+            public void onResponse(Call<LocatingStationResponse> call, Response<LocatingStationResponse> response) {
                 Log.w(TAG, "onResponse: " + response);
 
                 if (response.isSuccessful()) {
-
+                    Log.d(TAG, "onResponse: " + response.body().getFuelStationId());
+                    Log.d(TAG, "onResponse: " + response.body().getNumberOfPumps());
+                    Log.d(TAG, "onResponse: " + response.message());
+//                    Intent intent = new Intent(getBaseContext(), LocatingStationActivity.class);
+//                    intent.putExtra("EXTRA_SESSION_ID", response.body());
+//                    startActivity(intent);
                 } else {
                     tokenManager.deleteToken();
                     startActivity(new Intent(LocatingStationActivity.this, LoginActivity.class));
@@ -166,7 +181,7 @@ public class LocatingStationActivity extends AppCompatActivity implements Google
             }
 
             @Override
-            public void onFailure(Call<VisitCount> call, Throwable t) {
+            public void onFailure(Call<LocatingStationResponse> call, Throwable t) {
                 Log.w(TAG, "onFailure: " + t.getMessage());
             }
         });
