@@ -18,9 +18,7 @@ import androidx.core.app.ActivityCompat;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderApi;
-import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.pumpandgo.entities.LocatingStationResponse;
 import com.pumpandgo.network.ApiService;
 import com.pumpandgo.network.RetrofitBuilder;
@@ -58,7 +56,6 @@ public class LocatingStationActivity extends AppCompatActivity implements Google
                 .addOnConnectionFailedListener(this)
                 .addConnectionCallbacks(this)
                 .build();
-        getCurrentLocation();
     }
 
     public void onStart() {
@@ -77,28 +74,29 @@ public class LocatingStationActivity extends AppCompatActivity implements Google
     // This callback is invoked when the GoogleApiClient is successfully connected.
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        // We set a listener to our button only when the ApiClient is connected successfully
+        // We set a listener to our button only when the ApiClient is connected successfully.
         getCurrentLocation();
     }
 
-    //This callback is invoked when the user grants or rejects the location permission
+    // This callback is invoked when the user grants or rejects the location permission.
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
             case LOCATION_REQUEST:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     getCurrentLocation();
-                } else
-                    Toast.makeText(this, "Location permission denied", Toast.LENGTH_SHORT);
+                } else {
+                    locationAlertDialog();
+                }
                 break;
         }
     }
 
+    // If permissions or GPS is disabled, show the user a dialog.
     public void locationAlertDialog() {
         AlertDialog.Builder locationAlertDialog = new AlertDialog.Builder(this);
         locationAlertDialog.setMessage("Please ensure Location permissions are enabled and GPS is switched on");
         locationAlertDialog.setCancelable(true);
-
         locationAlertDialog.setPositiveButton(
                 "OK",
                 new DialogInterface.OnClickListener() {
@@ -108,56 +106,46 @@ public class LocatingStationActivity extends AppCompatActivity implements Google
                         finish();
                     }
                 });
-        AlertDialog alert11 = locationAlertDialog.create();
-        alert11.show();
+        AlertDialog alert = locationAlertDialog.create();
+        alert.show();
     }
 
+    // Checks if permissions are granted and then obtains the users coordinates.
     private void getCurrentLocation() {
-        //Checking if the location permission is granted
+        // Checking if the location permission is granted.
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{
                     Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION
             }, LOCATION_REQUEST);
-//            locationAlertDialog();
-            Log.d("test", "losdsadasdsad" +
-                    "" +
-                    "" +
-                    "" +
-                    "" +
-                    "" +
-                    "" +
-                    "" +
-                    "" +
-                    "" +
-                    "");
         }
-        //Fetching location using FusedLOcationProviderAPI
+
+        // Fetching location using FusedLOcationProviderAPI.
         FusedLocationProviderApi fusedLocationApi = LocationServices.FusedLocationApi;
         Location location = fusedLocationApi.getLastLocation(googleApiClient);
-        //In some rare cases Location obtained can be null
-        if (location == null) {
-//            locationAlertDialog();
-            Log.d("test", "Not able to fetch location");
-        } else {
+
+        // In some rare cases Location obtained can be null.
+        if (location != null) {
             checkIfAtFuelStation(location.getLatitude(), location.getLongitude());
             Log.d("Location co-ord are ", location.getLatitude() + "," + location.getLongitude());
         }
+
     }
 
-    //Callback invoked if the GoogleApiClient connection is suspended
+    // Callback invoked if the GoogleApiClient connection is suspended.
     @Override
     public void onConnectionSuspended(int i) {
         Toast.makeText(this, "Connection was suspended", Toast.LENGTH_SHORT);
         Log.d("test", "Connection was suspended");
     }
 
-    //Callback invoked if the GoogleApiClient connection fails
+    // Callback invoked if the GoogleApiClient connection fails.
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Toast.makeText(this, "Connection failed", Toast.LENGTH_SHORT);
         Log.d("test", "Connection failed");
     }
 
+    // Checks if the user is at a Fuelstation and launches the next activity if so.
     public void checkIfAtFuelStation(double latitude, double longitude) {
         call = service.checkIfAtFuelStation(latitude, longitude);
         call.enqueue(new Callback<LocatingStationResponse>() {
@@ -169,10 +157,14 @@ public class LocatingStationActivity extends AppCompatActivity implements Google
                 if (response.isSuccessful()) {
                     Log.d(TAG, "onResponse: " + response.body().getFuelStationId());
                     Log.d(TAG, "onResponse: " + response.body().getNumberOfPumps());
-                    Log.d(TAG, "onResponse: " + response.message());
-//                    Intent intent = new Intent(getBaseContext(), LocatingStationActivity.class);
-//                    intent.putExtra("EXTRA_SESSION_ID", response.body());
-//                    startActivity(intent);
+
+                    // If a station is found launch the next PumpNumberActivity.
+                    if (response.body().getFuelStationId() != 0 && response.body().getNumberOfPumps() != 0) {
+                        Intent intent = new Intent(getBaseContext(), PumpNumberActivity.class);
+                        intent.putExtra("FUEL_STATION_ID", response.body().getFuelStationId());
+                        intent.putExtra("NUMBER_OF_PUMPS", response.body().getNumberOfPumps());
+                        startActivity(intent);
+                    }
                 } else {
                     tokenManager.deleteToken();
                     startActivity(new Intent(LocatingStationActivity.this, LoginActivity.class));
@@ -187,6 +179,22 @@ public class LocatingStationActivity extends AppCompatActivity implements Google
         });
     }
 
+    // Cancels any api calls when the activity is destroyed.
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (call != null) {
+            call.cancel();
+            call = null;
+        }
+    }
+
+    // Go back to the Home Activity when the back button is pressed.
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(LocatingStationActivity.this, HomeActivity.class));
+        finish();
+    }
 }
 
 

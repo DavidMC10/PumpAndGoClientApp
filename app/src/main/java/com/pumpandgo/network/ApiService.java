@@ -33,7 +33,7 @@ public interface ApiService {
     @FormUrlEncoded
     Call<PaymentTest> paymentTest(@Field("token_id") String token_id);
 
-    @POST("testing")
+    @POST("getcurrentstation")
     @FormUrlEncoded
     Call<LocatingStationResponse> checkIfAtFuelStation(@Field("latitude") double latitude, @Field("longitude") double longitude);
 

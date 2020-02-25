@@ -1,23 +1,22 @@
 package com.pumpandgo;
 
+import android.app.ActionBar;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.NumberPicker;
+import android.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationServices;
-import com.pumpandgo.entities.FuelStationResponse;
 import com.pumpandgo.entities.VisitCount;
 import com.pumpandgo.network.ApiService;
 import com.pumpandgo.network.RetrofitBuilder;
 
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class PumpNumberActivity extends AppCompatActivity {
     private static final String TAG = "PumpNumberActivity";
@@ -30,7 +29,7 @@ public class PumpNumberActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_locatingstation);
+        setContentView(R.layout.activity_pumpnumber);
 
 //        ButterKnife.bind(this);
         tokenManager = TokenManager.getInstance(getSharedPreferences("prefs", MODE_PRIVATE));
@@ -40,8 +39,31 @@ public class PumpNumberActivity extends AppCompatActivity {
             startActivity(new Intent(this, LoginActivity.class));
             finish();
         }
+
+//        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+//        getSupportActionBar().setCustomView(R.layout.layout_actionbar);
+////        getSupportActionBar().setTitle("Texaco Dublin Road");
+//
+//        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
     }
 
+    // Cancels any api calls when the activity is destroyed.
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (call != null) {
+            call.cancel();
+            call = null;
+        }
+    }
+
+    // Go back to the Home Activity when the back button is pressed.
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(PumpNumberActivity.this, HomeActivity.class));
+        finish();
+    }
+}
 
 //    public void getNumberOfPumps() {
 //
@@ -76,5 +98,3 @@ public class PumpNumberActivity extends AppCompatActivity {
 //        });
 
 //    }
-
-}

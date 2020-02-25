@@ -1,0 +1,114 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="4dp"
+        android:layout_alignParentStart="true"
+        android:background="#ffffff">
+
+    <TextView
+        android:id="@+id/toolbarTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxLines="1"
+        android:text="Line one"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="22dp"
+        android:fontFamily="@font/open_sans_bold" />
+    </androidx.appcompat.widget.Toolbar>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/titleLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="34dp"
+            android:fontFamily="@font/open_sans_bold"
+            android:gravity="center"
+            android:text="@string/pump_number_select_pump_title"
+            android:textColor="@color/colorAccent"
+            android:textSize="26sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/open_sans"
+            android:gravity="center"
+            android:text="@string/pump_number_select_pump_message"
+            android:textColor="@color/colorAccent"
+            android:textSize="14sp" />
+
+        <NumberPicker
+            android:id="@+id/pumpNumberNumberPicker"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="120dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="150dp"
+            android:theme="@style/NumberPickerText" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:fontFamily="@font/open_sans"
+                android:text="@string/pump_number_fuelling_amount_text"
+                android:textColor="@color/colorAccent"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/open_sans"
+                android:text="£20"
+                android:textColor="@color/colorAccent"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/open_sans_bold"
+            android:gravity="center"
+            android:text="@string/pump_number_payment_method_text"
+            android:textColor="@color/colorAccent"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/buttonSignIn"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:background="@color/colorPrimary"
+            android:fontFamily="@font/open_sans_bold"
+            android:text="@string/pump_number_payment_button_text"
+            android:textColor="#ffffff"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+</FrameLayout>

@@ -15,6 +15,13 @@
     <string name="forgot_password_email_address_hint">EMAIL ADDRESS</string>
     <string name="forgot_password_button_title">SEND RESET LINK</string>
 
+    <!--activity_pumpnumber strings-->
+    <string name="pump_number_select_pump_title">Select your pump</string>
+    <string name="pump_number_select_pump_message">Make sure you are parked at this pump and remain in your vehicle</string>
+    <string name="pump_number_fuelling_amount_text">Your Maximum Fuelling Amount:</string>
+    <string name="pump_number_payment_method_text">Change Payment Method</string>
+    <string name="pump_number_payment_button_text">AUTHORIZE TRANSACTION</string>
+
     <!--activity_signup strings-->
     <string name="register_first_name_title">FIRST NAME:</string>
     <string name="register_first_name_hint">John</string>

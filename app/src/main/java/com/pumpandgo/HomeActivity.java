@@ -85,4 +85,14 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
         }
         return false;
     }
+
+    // Cancels any api calls when the activity is destroyed.
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (call != null) {
+            call.cancel();
+            call = null;
+        }
+    }
 }

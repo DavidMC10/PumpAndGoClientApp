@@ -1,5 +1,4 @@
 <resources>
-
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
@@ -8,4 +7,8 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!-- NumberPicker text size. -->
+    <style name="NumberPickerText">
+        <item name="android:textSize">40sp</item>
+    </style>
 </resources>
