@@ -16,7 +16,6 @@
             android:layout_height="match_parent"
             android:fontFamily="@font/open_sans_bold"
             android:gravity="center"
-            android:text="@string/settings_fragment_title"
             android:textColor="@color/colorAccent"
             android:textSize="28sp" />
 
@@ -180,6 +179,7 @@
                 android:src="@drawable/ic_credit_card_24px" />
 
             <TextView
+                android:id="@+id/paymentMethodTitle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fontFamily="@font/open_sans"

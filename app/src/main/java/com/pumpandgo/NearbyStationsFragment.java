@@ -73,10 +73,10 @@ public class NearbyStationsFragment extends Fragment {
                     recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
                     recyclerView.setHasFixedSize(true);
                     recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                    //creating recyclerview adapter
+                    // Creating recyclerview adapter.
                     FuelStationAdapter adapter = new FuelStationAdapter(getContext(), fuelStationList);
 
-                    //setting adapter to recyclerview
+                    // Setting adapter to recyclerview.
                     recyclerView.setAdapter(adapter);
                     Log.d(TAG, response.body().getData().get(0).getAddress1());
                     Log.d(TAG, response.body().getData().get(0).getData().get(0).getDay());

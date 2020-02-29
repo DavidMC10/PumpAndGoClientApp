@@ -1,14 +1,7 @@
 package com.pumpandgo;
 
-import android.app.ActionBar;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.NumberPicker;
-import android.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 

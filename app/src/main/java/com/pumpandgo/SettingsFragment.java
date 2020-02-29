@@ -11,6 +11,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.pumpandgo.entities.UserDetails;
@@ -19,6 +20,7 @@ import com.pumpandgo.network.RetrofitBuilder;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -28,6 +30,7 @@ import static android.content.Context.MODE_PRIVATE;
 public class SettingsFragment extends Fragment {
 
     private static final String TAG = "SettingsFragment";
+    private Toolbar topToolbar;
 
     @BindView(R.id.textViewEmail)
     TextView emailTextView;
@@ -62,6 +65,7 @@ public class SettingsFragment extends Fragment {
             startActivity(new Intent(getActivity(), LoginActivity.class));
             getActivity().finish();
         }
+
         getUserProfileDetails();
         return view;
     }
@@ -97,5 +101,12 @@ public class SettingsFragment extends Fragment {
                 Log.w(TAG, "onFailure: " + t.getMessage());
             }
         });
+    }
+
+    // Loads the paymentmethod activity.
+    @OnClick(R.id.paymentMethodTitle)
+    void goToPaymentMethodActivity() {
+        Intent intent = new Intent(getActivity(), PaymentMethodActivity.class);
+        startActivity(intent);
     }
 }

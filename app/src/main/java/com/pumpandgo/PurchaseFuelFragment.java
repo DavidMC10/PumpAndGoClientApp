@@ -96,7 +96,9 @@ public class PurchaseFuelFragment extends Fragment {
     // Loads the register activity.
     @OnClick(R.id.paymentGraphic)
     void goToLocatingStationActivity() {
-        Intent intent = new Intent(getActivity(), LocatingStationActivity.class);
-        startActivity(intent);
+
+
+
+
     }
 }
