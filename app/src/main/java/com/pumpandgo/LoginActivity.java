@@ -56,6 +56,7 @@ public class LoginActivity extends AppCompatActivity {
         tokenManager = TokenManager.getInstance(getSharedPreferences("prefs", MODE_PRIVATE));
         validator = new AwesomeValidation(ValidationStyle.BASIC);
         setupRules();
+
         if (tokenManager.getToken().getAccessToken() != null) {
             startActivity(new Intent(LoginActivity.this, HomeActivity.class));
             finish();
@@ -111,7 +112,6 @@ public class LoginActivity extends AppCompatActivity {
 
     // Sets validation rules.
     public void setupRules() {
-
         validator.addValidation(this, R.id.editTextEmail, Patterns.EMAIL_ADDRESS, R.string.err_email);
         validator.addValidation(this, R.id.editTextPassword, "[a-zA-Z0-9]{6,}", R.string.err_password);
     }

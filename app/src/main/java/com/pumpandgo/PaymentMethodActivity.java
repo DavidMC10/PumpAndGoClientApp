@@ -4,12 +4,15 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Patterns;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.basgeekball.awesomevalidation.AwesomeValidation;
+import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.pumpandgo.entities.PaymentMethod;
 import com.pumpandgo.entities.PaymentMethodResponse;
 import com.pumpandgo.network.ApiService;
@@ -37,7 +40,7 @@ public class PaymentMethodActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_paymentmethod);
 
-//        ButterKnife.bind(this);
+        ButterKnife.bind(this);
         tokenManager = TokenManager.getInstance(getSharedPreferences("prefs", MODE_PRIVATE));
         service = RetrofitBuilder.createServiceWithAuth(ApiService.class, tokenManager);
 
@@ -47,13 +50,13 @@ public class PaymentMethodActivity extends AppCompatActivity {
         }
 
         // Find the toolbar view inside the activity layout
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
-//        // Remove default title text/
-//        getSupportActionBar().setDisplayShowTitleEnabled(false);
-//        // Get access to the custom title view.
-//        TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbarTitle);
-//        mTitle.setText("Payment Methods");
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        // Remove default title text/
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        // Get access to the custom title view.
+        TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbarTitle);
+        mTitle.setText("Payment Methods");
         getPaymentMethods();
     }
 

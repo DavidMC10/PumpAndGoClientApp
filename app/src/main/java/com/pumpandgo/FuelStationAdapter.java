@@ -17,7 +17,6 @@ import java.util.List;
 
 public class FuelStationAdapter extends RecyclerView.Adapter<FuelStationAdapter.fuelStationViewHolder> {
 
-
     private Context context;
     private List<FuelStation> fuelStationList;
 

@@ -1,9 +1,11 @@
 package com.pumpandgo;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ContextThemeWrapper;
 
+import com.basgeekball.awesomevalidation.AwesomeValidation;
+import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.pumpandgo.entities.PaymentMethod;
 
 import java.util.List;
@@ -26,13 +30,8 @@ import java.util.List;
 
 public class PaymentMethodListAdapter extends ArrayAdapter<PaymentMethod> {
 
-    // The list values in the List of type Payment Method.
     List<PaymentMethod> paymentMethodList;
-
-    // Activity context.
     Context context;
-
-    // The layout resource file for the list items.
     int resource;
 
     // Constructor initializing the values.
@@ -64,7 +63,7 @@ public class PaymentMethodListAdapter extends ArrayAdapter<PaymentMethod> {
         // Getting the payment method of the specified position.
         PaymentMethod paymentMethod = paymentMethodList.get(position);
 
-        Log.d("yessss",String.valueOf(position));
+        Log.d("yessss", String.valueOf(position));
 
         // Adding values to the list item.
         textViewBrand.setText(paymentMethod.getBrand());
@@ -88,25 +87,44 @@ public class PaymentMethodListAdapter extends ArrayAdapter<PaymentMethod> {
     private void removeHero(final int position) {
         AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
         builder1.setMessage("Write your message here.");
+        final View customLayout = ((Activity) context).getLayoutInflater().inflate(R.layout.layout_payment, null);
         builder1.setCancelable(true);
+        builder1.setView(customLayout);
 
-        builder1.setPositiveButton(
-                "Yes",
+        AwesomeValidation mAwesomeValidation = new AwesomeValidation(ValidationStyle.BASIC);
+        mAwesomeValidation.addValidation(((Activity) context), R.id.editTextCardNumber, Patterns.EMAIL_ADDRESS, R.string.err_email);
+
+        builder1.setPositiveButton("Test",
                 new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //Do nothing here because we override this button later to change the close behaviour.
+                        //However, we still need this because on older versions of Android unless we
+                        //pass a handler the button doesn't get instantiated
                     }
                 });
 
-        builder1.setNegativeButton(
-                "No",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
+        AlertDialog dialog = builder1.create();
+        dialog.show();
+        //Overriding the handler immediately after show is probably a better approach than OnShowListener as described below
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-        AlertDialog alert11 = builder1.create();
-        alert11.show();
+                if (mAwesomeValidation.validate()) {
+                    Log.d("dsdsd", "dfdf");
+                }
+                Boolean wantToCloseDialog = false;
+                //Do stuff, possibly set wantToCloseDialog to true then...
+                if (wantToCloseDialog)
+                    dialog.dismiss();
+                //else dialog stays open. Make sure you have an obvious way to close the dialog especially if you set cancellable to false.
+            }
+        });
     }
+
+    public void setupRules() {
+
+    }
+
 }
