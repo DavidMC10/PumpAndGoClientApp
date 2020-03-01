@@ -74,7 +74,7 @@ public class NearbyStationsFragment extends Fragment {
                     recyclerView.setHasFixedSize(true);
                     recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                     // Creating recyclerview adapter.
-                    FuelStationAdapter adapter = new FuelStationAdapter(getContext(), fuelStationList);
+                    FuelStationListAdapter adapter = new FuelStationListAdapter(getContext(), fuelStationList);
 
                     // Setting adapter to recyclerview.
                     recyclerView.setAdapter(adapter);

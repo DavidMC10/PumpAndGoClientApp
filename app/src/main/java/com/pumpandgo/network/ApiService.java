@@ -1,6 +1,7 @@
 package com.pumpandgo.network;
 
 import com.pumpandgo.entities.AccessToken;
+import com.pumpandgo.entities.DeleteFuelCardResponse;
 import com.pumpandgo.entities.FuelStationResponse;
 import com.pumpandgo.entities.LocatingStationResponse;
 import com.pumpandgo.entities.PaymentMethodResponse;
@@ -44,6 +45,9 @@ public interface ApiService {
     @POST("getnearbystations")
     @FormUrlEncoded
     Call<FuelStationResponse> getNearbyStations(@Field("latitude") double latitude, @Field("longitude") double longitude, @Field("max_distance_limit") int maxDistanceLimit);
+
+    @POST("deletefuelcard")
+    Call<DeleteFuelCardResponse> deleteFuelCard();
 
     @POST("retrievepaymentmethods")
     Call<PaymentMethodResponse> getPaymentMethods();

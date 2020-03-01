@@ -15,13 +15,13 @@ import com.pumpandgo.entities.FuelStation;
 
 import java.util.List;
 
-public class FuelStationAdapter extends RecyclerView.Adapter<FuelStationAdapter.fuelStationViewHolder> {
+public class FuelStationListAdapter extends RecyclerView.Adapter<FuelStationListAdapter.fuelStationViewHolder> {
 
     private Context context;
     private List<FuelStation> fuelStationList;
 
     // Constructor
-    public FuelStationAdapter(Context context, List<FuelStation> fuelStationList) {
+    public FuelStationListAdapter(Context context, List<FuelStation> fuelStationList) {
         this.context = context;
         this.fuelStationList = fuelStationList;
     }
