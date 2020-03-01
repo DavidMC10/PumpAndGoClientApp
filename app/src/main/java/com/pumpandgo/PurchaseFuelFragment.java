@@ -97,8 +97,5 @@ public class PurchaseFuelFragment extends Fragment {
     @OnClick(R.id.paymentGraphic)
     void goToLocatingStationActivity() {
 
-
-
-
     }
 }

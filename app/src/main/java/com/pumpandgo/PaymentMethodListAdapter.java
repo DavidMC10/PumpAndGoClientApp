@@ -1,6 +1,7 @@
 package com.pumpandgo;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,9 +23,12 @@ import androidx.appcompat.view.ContextThemeWrapper;
 
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
+import com.basgeekball.awesomevalidation.utility.RegexTemplate;
 import com.pumpandgo.entities.PaymentMethod;
 
 import java.util.List;
+
+import javax.xml.validation.Validator;
 
 /**
  * Created by David McElhinney on 29/02/2020.
@@ -59,7 +65,6 @@ public class PaymentMethodListAdapter extends ArrayAdapter<PaymentMethod> {
         TextView textViewLast4 = view.findViewById(R.id.textViewLast4);
         TextView textViewEditCard = view.findViewById(R.id.textViewEditCard);
 
-
         // Getting the payment method of the specified position.
         PaymentMethod paymentMethod = paymentMethodList.get(position);
 
@@ -86,45 +91,33 @@ public class PaymentMethodListAdapter extends ArrayAdapter<PaymentMethod> {
     //this method will remove the item from the list
     private void removeHero(final int position) {
         AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
-        builder1.setMessage("Write your message here.");
-        final View customLayout = ((Activity) context).getLayoutInflater().inflate(R.layout.layout_payment, null);
-        builder1.setCancelable(true);
-        builder1.setView(customLayout);
-
         AwesomeValidation mAwesomeValidation = new AwesomeValidation(ValidationStyle.BASIC);
-        mAwesomeValidation.addValidation(((Activity) context), R.id.editTextCardNumber, Patterns.EMAIL_ADDRESS, R.string.err_email);
+        builder1.setMessage("Write your message here.");
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.layout_payment, null);
+        builder1.setView(view);
+        Button submit = (Button) view.findViewById(R.id.submit);
+        //removing the item
+        EditText test = (EditText) view.findViewById(R.id.editTextCardNumber);
+        mAwesomeValidation.addValidation(test, RegexTemplate.NOT_EMPTY, "Error");
 
-        builder1.setPositiveButton("Test",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //Do nothing here because we override this button later to change the close behaviour.
-                        //However, we still need this because on older versions of Android unless we
-                        //pass a handler the button doesn't get instantiated
-                    }
-                });
 
-        AlertDialog dialog = builder1.create();
-        dialog.show();
-        //Overriding the handler immediately after show is probably a better approach than OnShowListener as described below
-        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-            @Override
+
+        test.setText("wanker");
+        //if the response is positive in the alert
+        Button buttonX = (Button) view.findViewById(R.id.submit);
+// Register the onClick listener with the implementation above
+        buttonX.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                if (mAwesomeValidation.validate()) {
-                    Log.d("dsdsd", "dfdf");
+                if (mAwesomeValidation.validate()){
+                    test.setText("prick");
                 }
-                Boolean wantToCloseDialog = false;
-                //Do stuff, possibly set wantToCloseDialog to true then...
-                if (wantToCloseDialog)
-                    dialog.dismiss();
-                //else dialog stays open. Make sure you have an obvious way to close the dialog especially if you set cancellable to false.
+//                test.setText("bastard");
+                //DO SOMETHING! {RUN SOME FUNCTION ... DO CHECKS... ETC}
             }
         });
-    }
-
-    public void setupRules() {
+        builder1.show();
 
     }
-
 }
