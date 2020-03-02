@@ -22,7 +22,7 @@
     <string name="pump_number_payment_method_text">Change Payment Method</string>
     <string name="pump_number_payment_button_text">AUTHORIZE TRANSACTION</string>
 
-    <!--activity_signup strings-->
+    <!--activity_register strings-->
     <string name="register_first_name_title">FIRST NAME:</string>
     <string name="register_first_name_hint">John</string>
     <string name="register_last_name_title">LAST NAME:</string>
@@ -68,4 +68,11 @@
     <string name="err_email">The email must be a valid email address.</string>
     <string name="err_password">The password must be at least 6 characters.</string>
     <string name="err_confirm_password">Passwords do not match.</string>
+
+    <!-- Dialog Strings -->
+    <string name="dialog_email_hint">Email Address</string>
+    <string name="dialog_first_name_hint">First Name</string>
+    <string name="dialog_last_name_hint">Last Name</string>
+    <string name="dialog_password_hint">Password</string>
+    <string name="dialog_confirm_password_hint">Confirm Password</string>
 </resources>

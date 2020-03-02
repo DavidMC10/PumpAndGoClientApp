@@ -1,5 +1,6 @@
 package com.pumpandgo;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,7 +22,7 @@ import androidx.appcompat.app.AlertDialog;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.basgeekball.awesomevalidation.utility.RegexTemplate;
-import com.pumpandgo.entities.DeleteFuelCardResponse;
+import com.pumpandgo.entities.ApiError;
 import com.pumpandgo.entities.PaymentMethod;
 import com.pumpandgo.network.ApiService;
 import com.pumpandgo.network.RetrofitBuilder;
@@ -172,18 +174,21 @@ public class PaymentMethodListAdapter extends ArrayAdapter<PaymentMethod> {
     }
 
     public void deleteFuelCard() {
-        Call<DeleteFuelCardResponse> call;
+        Call call;
         tokenManager = TokenManager.getInstance(context.getSharedPreferences("prefs", MODE_PRIVATE));
         service = RetrofitBuilder.createServiceWithAuth(ApiService.class, tokenManager);
         call = service.deleteFuelCard();
-        call.enqueue(new Callback<DeleteFuelCardResponse>() {
-
+        call.enqueue(new Callback() {
             @Override
-            public void onResponse(Call<DeleteFuelCardResponse> call, Response<DeleteFuelCardResponse> response) {
+            public void onResponse(Call call, Response response) {
 //                Log.w(TAG, "onResponse: " + response);
 
                 if (response.isSuccessful()) {
                     context.startActivity(new Intent(context.getApplicationContext(), PaymentMethodActivity.class));
+                    ((Activity) context).finish();
+                } else if (response.code() == 422) {
+                    ApiError apiError = Utils.converErrors(response.errorBody());
+                    Toast.makeText(context.getApplicationContext(), "The email has already been taken.", Toast.LENGTH_LONG).show();
                 } else {
                     tokenManager.deleteToken();
                     context.startActivity(new Intent(context.getApplicationContext(), LoginActivity.class));
@@ -191,7 +196,7 @@ public class PaymentMethodListAdapter extends ArrayAdapter<PaymentMethod> {
             }
 
             @Override
-            public void onFailure(Call<DeleteFuelCardResponse> call, Throwable t) {
+            public void onFailure(Call call, Throwable t) {
 //                Log.w(TAG, "onFailure: " + t.getMessage());
             }
         });

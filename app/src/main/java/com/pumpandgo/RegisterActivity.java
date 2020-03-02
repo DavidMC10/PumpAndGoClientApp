@@ -14,17 +14,12 @@ import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.basgeekball.awesomevalidation.utility.RegexTemplate;
 import com.pumpandgo.entities.AccessToken;
-import com.pumpandgo.entities.ApiError;
 import com.pumpandgo.network.ApiService;
 import com.pumpandgo.network.RetrofitBuilder;
-
-import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -54,7 +49,7 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_signup);
+        setContentView(R.layout.activity_register);
 
         ButterKnife.bind(this);
         service = RetrofitBuilder.createService(ApiService.class);
@@ -62,14 +57,14 @@ public class RegisterActivity extends AppCompatActivity {
         tokenManager = TokenManager.getInstance(getSharedPreferences("prefs", MODE_PRIVATE));
         setupRules();
 
-        if(tokenManager.getToken().getAccessToken() != null){
+        if (tokenManager.getToken().getAccessToken() != null) {
             startActivity(new Intent(RegisterActivity.this, ForgotPasswordActivity.class));
             finish();
         }
     }
 
     @OnClick(R.id.buttonSignup)
-    void register(){
+    public void register() {
 
         // Gets the data from the textfields.
         String firstName = firstNameText.getText().toString();
@@ -78,8 +73,7 @@ public class RegisterActivity extends AppCompatActivity {
         String password = editTextPassword.getText().toString();
         String confirmPassword = editTextConfirmPassword.getText().toString();
 
-
-        if(validator.validate()) {
+        if (validator.validate()) {
             loader.setVisibility(View.VISIBLE);
             call = service.register(firstName, lastName, email, password);
             call.enqueue(new Callback<AccessToken>() {
@@ -89,12 +83,11 @@ public class RegisterActivity extends AppCompatActivity {
                     Log.w(TAG, "onResponse: " + response);
 
                     if (response.isSuccessful()) {
-                        Log.w(TAG, "onResponse: " + response.body() );
+                        Log.w(TAG, "onResponse: " + response.body());
                         tokenManager.saveToken(response.body());
                         startActivity(new Intent(RegisterActivity.this, HomeActivity.class));
                         finish();
                     } else {
-                        handleErrors(response.errorBody());
                         loader.setVisibility(View.INVISIBLE);
                     }
                 }
@@ -110,35 +103,12 @@ public class RegisterActivity extends AppCompatActivity {
 
     // Allows the user to go to the login activity.
     @OnClick(R.id.textViewRegister)
-    void goToLogin(){
+    void goToLogin() {
         startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
     }
 
-
-    private void handleErrors(ResponseBody response){
-
-        ApiError apiError = Utils.converErrors(response);
-
-        for(Map.Entry<String, List<String>> error : apiError.getErrors().entrySet()){
-            if(error.getKey().equals("first_name")){
-                firstNameText.setError(error.getValue().get(0));
-            }
-            if(error.getKey().equals("last_name")){
-                firstNameText.setError(error.getValue().get(0));
-            }
-            if(error.getKey().equals("email")){
-                editTextEmail.setError(error.getValue().get(0));
-            }
-            if(error.getKey().equals("password")){
-                editTextPassword.setError(error.getValue().get(0));
-            }
-        }
-
-    }
-
-
     // Sets validation rules.
-    public void setupRules(){
+    public void setupRules() {
         validator.addValidation(this, R.id.editTextFirstname, RegexTemplate.NOT_EMPTY, R.string.err_name);
         validator.addValidation(this, R.id.editTextLastname, RegexTemplate.NOT_EMPTY, R.string.err_name);
         validator.addValidation(this, R.id.editTextEmail, Patterns.EMAIL_ADDRESS, R.string.err_email);
@@ -150,7 +120,7 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(call != null) {
+        if (call != null) {
             call.cancel();
             call = null;
         }

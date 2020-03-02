@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.pumpandgo.entities.VisitCount;
+import com.pumpandgo.entities.VisitCountResponse;
 import com.pumpandgo.network.ApiService;
 import com.pumpandgo.network.RetrofitBuilder;
 
@@ -17,7 +17,7 @@ public class PumpNumberActivity extends AppCompatActivity {
 
     ApiService service;
     TokenManager tokenManager;
-    Call<VisitCount> call;
+    Call<VisitCountResponse> call;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

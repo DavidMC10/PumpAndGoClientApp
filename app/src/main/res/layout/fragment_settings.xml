@@ -27,6 +27,7 @@
                 android:id="@+id/listView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:listSelector="@android:color/transparent"
                 android:divider="@android:color/darker_gray"
                 android:dividerHeight="4px" />
 

@@ -6,14 +6,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
-import com.pumpandgo.entities.VisitCount;
+import com.pumpandgo.entities.VisitCountResponse;
 import com.pumpandgo.network.ApiService;
 import com.pumpandgo.network.RetrofitBuilder;
 
@@ -30,6 +30,8 @@ public class PurchaseFuelFragment extends Fragment {
 
     private static final String TAG = "PurchaseFuelFragment";
 
+    @BindView(R.id.purchaseFuelRootLayout)
+    LinearLayout purchaseFuelRootLayout;
     @BindView(R.id.textViewTitle)
     TextView titleTextView;
     @BindView(R.id.textViewUserFirstName)
@@ -43,7 +45,7 @@ public class PurchaseFuelFragment extends Fragment {
 
     ApiService service;
     TokenManager tokenManager;
-    Call<VisitCount> call;
+    Call<VisitCountResponse> call;
 
     @Nullable
     @Override
@@ -66,18 +68,25 @@ public class PurchaseFuelFragment extends Fragment {
 
     public void getVisitCount() {
         loader.setVisibility(View.VISIBLE);
+        purchaseFuelRootLayout.setVisibility(View.INVISIBLE);
         call = service.visitCount();
-        call.enqueue(new Callback<VisitCount>() {
+        call.enqueue(new Callback<VisitCountResponse>() {
 
             @Override
-            public void onResponse(Call<VisitCount> call, Response<VisitCount> response) {
+            public void onResponse(Call<VisitCountResponse> call, Response<VisitCountResponse> response) {
                 Log.w(TAG, "onResponse: " + response);
 
                 if (response.isSuccessful()) {
                     loader.setVisibility(View.INVISIBLE);
+                    purchaseFuelRootLayout.setVisibility(View.VISIBLE);
                     titleTextView.setText("Good Afternoon");
                     userFirstNameTextView.setText(response.body().getFirstName());
-                    visitCountTextView.setText(String.valueOf(response.body().getVisitCount()) + " visits to go");
+                    if (response.body().getVisitCount() == 0) {
+                        visitCountTextView.setText("Congratulations you have unlocked 10% fuel discount on your next fuel purchase.");
+                    } else {
+                        visitCountTextView.setText(String.valueOf(response.body().getVisitCount()) + " visits to go");
+                    }
+
                     endingTextTextView.setText("to unlock your fuel reward");
                 } else {
                     tokenManager.deleteToken();
@@ -87,7 +96,7 @@ public class PurchaseFuelFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<VisitCount> call, Throwable t) {
+            public void onFailure(Call<VisitCountResponse> call, Throwable t) {
                 Log.w(TAG, "onFailure: " + t.getMessage());
             }
         });

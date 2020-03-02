@@ -42,7 +42,6 @@ public class SettingsFragment extends Fragment {
 
     @BindView(R.id.progressBar)
     ProgressBar loader;
-
     @BindView(R.id.settingsRootLayout)
     LinearLayout settingsRootLayout;
 
@@ -105,7 +104,7 @@ public class SettingsFragment extends Fragment {
                     settingsList.add(new Setting(R.drawable.ic_noun_distance_24px, "Maximum Distance", String.valueOf(response.body().getMaxDistanceLimit()) + "KM"));
 
                     //creating the adapter
-                    SettingsListAdapter adapter = new SettingsListAdapter((AppCompatActivity)getActivity(), R.layout.layout_settings_list, settingsList);
+                    SettingsListAdapter adapter = new SettingsListAdapter(getActivity(), R.layout.layout_settings_list, settingsList);
 
                     //attaching adapter to the listview
                     listView.setAdapter(adapter);
@@ -124,10 +123,9 @@ public class SettingsFragment extends Fragment {
         });
     }
 
-//    // Loads the paymentmethod activity.
-//    @OnClick(R.id.paymentMethodTitle)
-//    void goToPaymentMethodActivity() {
-//        Intent intent = new Intent(getActivity(), PaymentMethodActivity.class);
-//        startActivity(intent);
-//    }
+    // Loads the PaymentMethod activity.
+    @OnClick(R.id.textViewEdit)
+    public void goToPaymentMethods() {
+        startActivity(new Intent(getActivity(), PaymentMethodActivity.class));
+    }
 }

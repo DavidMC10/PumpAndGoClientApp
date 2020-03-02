@@ -2,7 +2,7 @@ package com.pumpandgo.entities;
 
 import com.squareup.moshi.Json;
 
-public class VisitCount {
+public class VisitCountResponse {
 
     @Json(name = "first_name")
     String firstName;

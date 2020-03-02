@@ -1,14 +1,14 @@
 package com.pumpandgo.network;
 
 import com.pumpandgo.entities.AccessToken;
-import com.pumpandgo.entities.DeleteFuelCardResponse;
 import com.pumpandgo.entities.FuelStationResponse;
 import com.pumpandgo.entities.LocatingStationResponse;
 import com.pumpandgo.entities.PaymentMethodResponse;
 import com.pumpandgo.entities.PaymentTest;
 import com.pumpandgo.entities.UserDetails;
-import com.pumpandgo.entities.VisitCount;
+import com.pumpandgo.entities.VisitCountResponse;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -29,7 +29,7 @@ public interface ApiService {
     Call<AccessToken> refresh(@Field("refresh_token") String refreshToken);
 
     @POST("visitcount")
-    Call<VisitCount> visitCount();
+    Call<VisitCountResponse> visitCount();
 
     @POST("testing")
     @FormUrlEncoded
@@ -46,8 +46,24 @@ public interface ApiService {
     @FormUrlEncoded
     Call<FuelStationResponse> getNearbyStations(@Field("latitude") double latitude, @Field("longitude") double longitude, @Field("max_distance_limit") int maxDistanceLimit);
 
+    @POST("updatename")
+    @FormUrlEncoded
+    Call<Void> updateName(@Field("first_name") String firstName, @Field("last_name") String lastName);
+
+    @POST("updateemail")
+    @FormUrlEncoded
+    Call<Void> updateEmail(@Field("email") String email);
+
+    @POST("updatepassword")
+    @FormUrlEncoded
+    Call<Void> updatePassword(@Field("password") String password);
+
+    @POST("updatedistancelimit")
+    @FormUrlEncoded
+    Call<Void> updateMaxDistanceLimit(@Field("max_distance_limit") int maxDistanceLimit);
+
     @POST("deletefuelcard")
-    Call<DeleteFuelCardResponse> deleteFuelCard();
+    Call<Void> deleteFuelCard();
 
     @POST("retrievepaymentmethods")
     Call<PaymentMethodResponse> getPaymentMethods();
