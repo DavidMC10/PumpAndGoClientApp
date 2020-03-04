@@ -23,36 +23,36 @@ public class BusinessHours {
         return fuelStationId;
     }
 
-    public void setFuelStationId(int fuelStationId) {
-        this.fuelStationId = fuelStationId;
-    }
-
     public int getBusinessHoursId() {
         return businessHoursId;
-    }
-
-    public void setBusinessHoursId(int businessHoursId) {
-        this.businessHoursId = businessHoursId;
     }
 
     public String getDay() {
         return day;
     }
 
-    public void setDay(String day) {
-        this.day = day;
-    }
-
     public String getOpenTime() {
         return openTime;
     }
 
-    public void setOpenTime(String openTime) {
-        this.openTime = openTime;
-    }
-
     public String getCloseTime() {
         return closeTime;
+    }
+
+    public void setFuelStationId(int fuelStationId) {
+        this.fuelStationId = fuelStationId;
+    }
+
+    public void setBusinessHoursId(int businessHoursId) {
+        this.businessHoursId = businessHoursId;
+    }
+
+    public void setDay(String day) {
+        this.day = day;
+    }
+
+    public void setOpenTime(String openTime) {
+        this.openTime = openTime;
     }
 
     public void setCloseTime(String closeTime) {

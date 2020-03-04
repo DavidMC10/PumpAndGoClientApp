@@ -14,12 +14,12 @@ public class VisitCountResponse {
         return firstName;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
     public int getVisitCount() {
         return visitCount;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     public void setVisitCount(int visitCount) {

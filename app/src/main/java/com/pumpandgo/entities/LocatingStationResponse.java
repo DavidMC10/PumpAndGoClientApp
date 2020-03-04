@@ -15,12 +15,12 @@ public class LocatingStationResponse {
         return fuelStationId;
     }
 
-    public void setFuelStationId(int fuelStationId) {
-        this.fuelStationId = fuelStationId;
-    }
-
     public int getNumberOfPumps() {
         return numberOfPumps;
+    }
+
+    public void setFuelStationId(int fuelStationId) {
+        this.fuelStationId = fuelStationId;
     }
 
     public void setNumberOfPumps(int numberOfPumps) {

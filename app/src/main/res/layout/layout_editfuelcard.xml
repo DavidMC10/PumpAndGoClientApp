@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/editTextExpMonth"
+            android:layout_width="45dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:maxLength="2"
+            android:fontFamily="@font/open_sans"
+            android:hint="@string/dialog_month_hint"
+            android:inputType="number"
+            android:textColor="@android:color/black" />
+
+        <EditText
+            android:id="@+id/editTextExpYear"
+            android:layout_width="45dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:maxLength="2"
+            android:fontFamily="@font/open_sans"
+            android:hint="@string/dialog_year_hint"
+            android:inputType="number"
+            android:textColor="@android:color/black" />
+    </LinearLayout>
+</LinearLayout>

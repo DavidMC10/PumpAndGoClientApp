@@ -1,6 +1,7 @@
 package com.pumpandgo.network;
 
 import com.pumpandgo.entities.AccessToken;
+import com.pumpandgo.entities.DefaultPaymentMethodResponse;
 import com.pumpandgo.entities.FuelStationResponse;
 import com.pumpandgo.entities.LocatingStationResponse;
 import com.pumpandgo.entities.PaymentMethodResponse;
@@ -8,7 +9,6 @@ import com.pumpandgo.entities.PaymentTest;
 import com.pumpandgo.entities.UserDetails;
 import com.pumpandgo.entities.VisitCountResponse;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -23,6 +23,9 @@ public interface ApiService {
     @POST("login")
     @FormUrlEncoded
     Call<AccessToken> login(@Field("email") String email, @Field("password") String password);
+
+    @POST("logout")
+    Call<Void> logout();
 
     @POST("refresh")
     @FormUrlEncoded
@@ -62,8 +65,35 @@ public interface ApiService {
     @FormUrlEncoded
     Call<Void> updateMaxDistanceLimit(@Field("max_distance_limit") int maxDistanceLimit);
 
+    @POST("addstripecard")
+    @FormUrlEncoded
+    Call<Void> addStripeCard(@Field("card_number") String cardNumber, @Field("exp_month") String expMonth, @Field("exp_year") String expYear, @Field("cvc") String cvc);
+
+    @POST("updatestripecard")
+    @FormUrlEncoded
+    Call<Void> updateStripeCard(@Field("card_id") String cardId, @Field("exp_month") String expMonth, @Field("exp_year") String expYear);
+
+    @POST("deletestripecard")
+    @FormUrlEncoded
+    Call<Void> deleteStripeCard(@Field("card_id") String cardId);
+
+    @POST("addfuelcard")
+    @FormUrlEncoded
+    Call<Void> addFuelCard(@Field("fuel_card_no") String fuelCardNo, @Field("exp_month") String expMonth, @Field("exp_year") String expYear);
+
+    @POST("updatefuelcard")
+    @FormUrlEncoded
+    Call<Void> updateFuelCard(@Field("exp_month") String expMonth, @Field("exp_year") String expYear);
+
     @POST("deletefuelcard")
     Call<Void> deleteFuelCard();
+
+    @POST("getdefaultpaymentmethod")
+    Call<DefaultPaymentMethodResponse> getDefaultPaymentMethod();
+
+    @POST("setdefaultpaymentmethod")
+    @FormUrlEncoded
+    Call<Void> setDefaultPaymentMethod(@Field("default_payment_method") String cardId);
 
     @POST("retrievepaymentmethods")
     Call<PaymentMethodResponse> getPaymentMethods();

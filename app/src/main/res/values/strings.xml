@@ -56,6 +56,10 @@
     <string name="fuelstations_opening_hours_title">Opening Hours</string>
     <string name="fuelstations_directions_button_name">Start</string>
 
+    <!--layout_settings_list strings-->
+    <string name="settings_list_edit">Edit</string>
+
+
     <!--nav_menu strings-->
     <string name="nav_menu_purchase_fuel">Purchase Fuel</string>
     <string name="nav_menu_nearby_stations">Nearby Stations</string>
@@ -75,4 +79,8 @@
     <string name="dialog_last_name_hint">Last Name</string>
     <string name="dialog_password_hint">Password</string>
     <string name="dialog_confirm_password_hint">Confirm Password</string>
+    <string name="dialog_card_number_hint">Card Number</string>
+    <string name="dialog_month_hint">MM</string>
+    <string name="dialog_year_hint">YY</string>
+    <string name="dialog_cvc_hint">CVC</string>
 </resources>

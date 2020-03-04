@@ -17,6 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import com.pumpandgo.entities.Setting;
 import com.pumpandgo.entities.UserDetails;
@@ -38,25 +39,23 @@ import static android.content.Context.MODE_PRIVATE;
 public class SettingsFragment extends Fragment {
 
     private static final String TAG = "SettingsFragment";
-    private Toolbar topToolbar;
 
-    @BindView(R.id.progressBar)
-    ProgressBar loader;
-    @BindView(R.id.settingsRootLayout)
-    LinearLayout settingsRootLayout;
-
+    // Declaration variables.
     ApiService service;
     TokenManager tokenManager;
     Call<UserDetails> call;
     List<Setting> settingsList;
     ListView listView;
 
+    @BindView(R.id.progressBar)
+    ProgressBar loader;
+    @BindView(R.id.settingsRootLayout)
+    LinearLayout settingsRootLayout;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
-
         ButterKnife.bind(this, view);
         tokenManager = TokenManager.getInstance(this.getActivity().getSharedPreferences("prefs", MODE_PRIVATE));
         service = RetrofitBuilder.createServiceWithAuth(ApiService.class, tokenManager);
@@ -66,15 +65,15 @@ public class SettingsFragment extends Fragment {
             getActivity().finish();
         }
 
-        //initializing objects
+        // Initialise objects.
         settingsList = new ArrayList<>();
         listView = (ListView) view.findViewById(R.id.listView);
 
-        // Find the toolbar view inside the activity layout
+        // Find the toolbar view inside the activity layout.
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
-        // Remove default title text/
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+
         // Get access to the custom title view.
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbarTitle);
         mTitle.setText("Settings");
@@ -83,6 +82,7 @@ public class SettingsFragment extends Fragment {
         return view;
     }
 
+    // Gets the user's profile details.
     public void getUserProfileDetails() {
         loader.setVisibility(View.VISIBLE);
         settingsRootLayout.setVisibility(View.INVISIBLE);
@@ -97,16 +97,16 @@ public class SettingsFragment extends Fragment {
                     loader.setVisibility(View.INVISIBLE);
                     settingsRootLayout.setVisibility(View.VISIBLE);
 
-                    //adding some values to our list
+                    // Populating the list with values.
                     settingsList.add(new Setting(R.drawable.ic_account_circle_24px, "Full Name", response.body().getFirstName() + " " + response.body().getLastName()));
                     settingsList.add(new Setting(R.drawable.ic_email_24px, "Email", response.body().getEmail()));
                     settingsList.add(new Setting(R.drawable.ic_lock_24px, "Password", "*********"));
                     settingsList.add(new Setting(R.drawable.ic_noun_distance_24px, "Maximum Distance", String.valueOf(response.body().getMaxDistanceLimit()) + "KM"));
 
-                    //creating the adapter
+                    // Creating the adapter.
                     SettingsListAdapter adapter = new SettingsListAdapter(getActivity(), R.layout.layout_settings_list, settingsList);
 
-                    //attaching adapter to the listview
+                    // Attaching adapter to the listview.
                     listView.setAdapter(adapter);
 
                 } else {
@@ -118,6 +118,34 @@ public class SettingsFragment extends Fragment {
 
             @Override
             public void onFailure(Call<UserDetails> call, Throwable t) {
+                Log.w(TAG, "onFailure: " + t.getMessage());
+            }
+        });
+    }
+
+    // Logs the user out.
+    @OnClick(R.id.textViewLogOut)
+    public void logout() {
+        Call call;
+        call = service.logout();
+        call.enqueue(new Callback() {
+            @Override
+            public void onResponse(Call call, Response response) {
+                Log.w(TAG, "onResponse: " + response);
+                // If successful reload the fragment or else delete the token and display the Login Activity.
+                if (response.isSuccessful()) {
+                    tokenManager.deleteToken();
+                    startActivity(new Intent(getActivity(), LoginActivity.class));
+                    getActivity().finish();
+                } else {
+                    tokenManager.deleteToken();
+                    startActivity(new Intent(getActivity(), LoginActivity.class));
+                    getActivity().finish();
+                }
+            }
+
+            @Override
+            public void onFailure(Call call, Throwable t) {
                 Log.w(TAG, "onFailure: " + t.getMessage());
             }
         });

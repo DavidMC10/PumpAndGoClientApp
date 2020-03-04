@@ -115,7 +115,7 @@ public class SettingsListAdapter extends ArrayAdapter<Setting> {
         // Create the AlertDialog and set attributes.
         AlertDialog updateNameDialog = new AlertDialog.Builder(context)
                 .setView(view)
-                .setTitle("Update Email:")
+                .setTitle("Update Name:")
                 .setPositiveButton("Update", null)
                 .setNegativeButton("Cancel", null)
                 .create();

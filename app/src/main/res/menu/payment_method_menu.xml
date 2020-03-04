@@ -1,0 +1,22 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/addPaymentMethod"
+        android:icon="@drawable/ic_add_24px"
+        android:title="Compose"
+        app:showAsAction="ifRoom">
+
+        <menu>
+            <item
+                android:id="@+id/addStripeCard"
+                android:title="Add Credit/Debit Card"
+                android:onClick="addStripeCardAction"
+                app:showAsAction="ifRoom" />
+            <item
+                android:id="@+id/addFuelCard"
+                android:title="Add Fuel Card"
+                android:onClick="addFuelCardAction"
+                app:showAsAction="ifRoom" />
+        </menu>
+    </item>
+</menu>
