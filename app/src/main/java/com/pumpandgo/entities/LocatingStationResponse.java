@@ -10,7 +10,6 @@ public class LocatingStationResponse {
     @Json(name = "number_of_pumps")
     int numberOfPumps;
 
-
     public int getFuelStationId() {
         return fuelStationId;
     }

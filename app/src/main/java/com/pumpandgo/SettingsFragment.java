@@ -71,8 +71,8 @@ public class SettingsFragment extends Fragment {
 
         // Find the toolbar view inside the activity layout.
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
-        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         // Get access to the custom title view.
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbarTitle);
@@ -103,11 +103,14 @@ public class SettingsFragment extends Fragment {
                     settingsList.add(new Setting(R.drawable.ic_lock_24px, "Password", "*********"));
                     settingsList.add(new Setting(R.drawable.ic_noun_distance_24px, "Maximum Distance", String.valueOf(response.body().getMaxDistanceLimit()) + "KM"));
 
-                    // Creating the adapter.
-                    SettingsListAdapter adapter = new SettingsListAdapter(getActivity(), R.layout.layout_settings_list, settingsList);
+                    // Ensure activity is not null.
+                    if (getActivity() != null) {
+                        // Creating the adapter.
+                        SettingsListAdapter adapter = new SettingsListAdapter(getActivity(), R.layout.layout_settings_list, settingsList);
 
-                    // Attaching adapter to the listview.
-                    listView.setAdapter(adapter);
+                        // Attaching adapter to the listview.
+                        listView.setAdapter(adapter);
+                    }
 
                 } else {
                     tokenManager.deleteToken();

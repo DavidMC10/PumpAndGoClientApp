@@ -6,9 +6,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -39,8 +43,10 @@ public class NearbyStationsFragment extends Fragment {
     RecyclerView recyclerView;
     View view;
 
+    @BindView(R.id.progressBar)
+    ProgressBar loader;
     @BindView(R.id.nearbyStationsRootLayout)
-    RelativeLayout rootLayout;
+    RelativeLayout nearbyStationsRootLayout;
 
     @Nullable
     @Override
@@ -55,13 +61,23 @@ public class NearbyStationsFragment extends Fragment {
             startActivity(new Intent(getActivity(), LoginActivity.class));
             getActivity().finish();
         }
-        getNearbyFuelStations();
 
+        // Find the toolbar view inside the activity layout.
+        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        // Get access to the custom title view.
+        TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbarTitle);
+        mTitle.setText("Nearby Fuel Stations");
+
+        getNearbyFuelStations();
         return view;
     }
 
     public void getNearbyFuelStations(){
-
+        loader.setVisibility(View.VISIBLE);
+        nearbyStationsRootLayout.setVisibility(View.INVISIBLE);
         call = service.getNearbyStations(53.304857,-6.304662, 20);
         call.enqueue(new Callback<FuelStationResponse>() {
             @Override
@@ -69,21 +85,32 @@ public class NearbyStationsFragment extends Fragment {
                 Log.w(TAG, "onResponse: " + response );
 
                 if(response.isSuccessful()){
-                    fuelStationList = response.body().getData();
-                    recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-                    recyclerView.setHasFixedSize(true);
-                    recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                    // Creating recyclerview adapter.
-                    FuelStationListAdapter adapter = new FuelStationListAdapter(getContext(), fuelStationList);
+                    loader.setVisibility(View.INVISIBLE);
+                    nearbyStationsRootLayout.setVisibility(View.VISIBLE);
+                    // Ensure activity is not null.
+                    if (getActivity() != null) {
 
-                    // Setting adapter to recyclerview.
-                    recyclerView.setAdapter(adapter);
-                    Log.d(TAG, response.body().getData().get(0).getAddress1());
-                    Log.d(TAG, response.body().getData().get(0).getData().get(0).getDay());
+                        fuelStationList = response.body().getData();
+                        // Set Recycler View.
+                        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+                        recyclerView.setHasFixedSize(true);
+                        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+                        // Creating recyclerview adapter.
+                        FuelStationListAdapter adapter = new FuelStationListAdapter(getContext(), fuelStationList);
+
+                        // Setting adapter to recyclerview.
+                        recyclerView.setAdapter(adapter);
+                    }
+                    Log.d(TAG, response.body().getData().get(0).getFuelStationName());
+                    Log.d(TAG, response.body().getData().get(0).getData().get(0).getOpenTime());
                 } else {
-                    tokenManager.deleteToken();
-                    startActivity(new Intent(getActivity(), LoginActivity.class));
-                    getActivity().finish();
+                    // Ensure activity is not null.
+                    if (getActivity() != null) {
+                        tokenManager.deleteToken();
+                        startActivity(new Intent(getActivity(), LoginActivity.class));
+                        getActivity().finish();
+                    }
                 }
             }
             @Override

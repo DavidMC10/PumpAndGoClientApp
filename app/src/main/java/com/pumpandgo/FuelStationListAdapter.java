@@ -14,9 +14,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.pumpandgo.entities.FuelStation;
 
 import java.util.List;
+import java.util.Locale;
 
 public class FuelStationListAdapter extends RecyclerView.Adapter<FuelStationListAdapter.fuelStationViewHolder> {
 
+    // Declaration variables
     private Context context;
     private List<FuelStation> fuelStationList;
 
@@ -39,27 +41,26 @@ public class FuelStationListAdapter extends RecyclerView.Adapter<FuelStationList
     @Override
     public void onBindViewHolder(fuelStationViewHolder holder, int position) {
 
-        // Gets the fuelstation of the specified position.
+        // Gets the Fuelstation of the specified position.
         FuelStation fuelStation = fuelStationList.get(position);
 
         // Binds the data to the viewholder views.
-        holder.textViewName.setText(fuelStation.getFuelStationName());
-        holder.textViewAddress1.setText(fuelStation.getAddress1());
-        holder.textViewAddress2.setText(fuelStation.getAddress2());
-        holder.textViewCityTown.setText(fuelStation.getCityTown());
+        holder.textViewFuelStationName.setText(fuelStation.getFuelStationName());
+        holder.textViewAddress.setText(fuelStation.getAddress1() + ", " + fuelStation.getAddress2() + ", " + fuelStation.getCityTown());
+        holder.textViewDistance.setText(fuelStation.getDistance() + "KM");
+        holder.textViewOpeningHours.setText(fuelStation.getData().get(0).getOpenTime() + "-" + fuelStation.getData().get(0).getCloseTime());
 
         // Button that takes the user to Google Maps to get directions to the fuel station.
         holder.directionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Uri gmmIntentUri = Uri.parse("geo:" + fuelStation.getLatitude()+ "," + fuelStation.getLongitude());
-                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-                mapIntent.setPackage("com.google.android.apps.maps");
-                context.startActivity(mapIntent);
+                String uri = String.format(Locale.ENGLISH, "http://maps.google.com/maps?daddr=%f,%f (%s)", fuelStation.getLatitude(), fuelStation.getLongitude(), "");
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                intent.setPackage("com.google.android.apps.maps");
+                context.startActivity(intent);
             }
         });
     }
-
 
     // Returns the size of the list.
     @Override
@@ -67,19 +68,17 @@ public class FuelStationListAdapter extends RecyclerView.Adapter<FuelStationList
         return fuelStationList.size();
     }
 
-
     class fuelStationViewHolder extends RecyclerView.ViewHolder {
 
-        TextView textViewName, textViewAddress1, textViewAddress2, textViewCityTown;
+        TextView textViewFuelStationName, textViewDistance, textViewAddress, textViewOpeningHours;
         Button directionButton;
 
         public fuelStationViewHolder(View fuelStationView) {
             super(fuelStationView);
-
-            textViewName = fuelStationView.findViewById(R.id.textViewName);
-            textViewAddress1 = fuelStationView.findViewById(R.id.textViewAddress1);
-            textViewAddress2 = fuelStationView.findViewById(R.id.textViewAddress2);
-            textViewCityTown = fuelStationView.findViewById(R.id.textViewCityTown);
+            textViewFuelStationName = fuelStationView.findViewById(R.id.textViewFuelStationName);
+            textViewDistance = fuelStationView.findViewById(R.id.textViewDistance);
+            textViewAddress = fuelStationView.findViewById(R.id.textViewAddress);
+            textViewOpeningHours = fuelStationView.findViewById(R.id.textViewOpeningHours);
             directionButton = fuelStationView.findViewById(R.id.buttonDirections);
         }
     }

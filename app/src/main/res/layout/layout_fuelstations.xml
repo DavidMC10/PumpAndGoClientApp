@@ -1,132 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp">
+        android:layout_margin="10dp"
+        card_view:cardCornerRadius="6dp"
+        card_view:cardUseCompatPadding="true">
 
-        <TableLayout
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="8dp">
+            android:layout_margin="6dp"
+            android:orientation="vertical">
 
-            <TableRow
-                android:id="@+id/firstRow"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/textViewName"
+                    android:id="@+id/textViewFuelStationName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:fontFamily="@font/open_sans"
-                    android:text="Texaco Station and Spar Shop" />
+                    android:layout_weight="1"
+                    android:fontFamily="@font/open_sans_bold"
+                    android:text="Texaco Station and Spar Shop"
+                    android:textColor="@android:color/black"
+                    android:textSize="16dp" />
 
-            </TableRow>
+            </LinearLayout>
 
-            <TableRow
-                android:id="@+id/secondRow"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/textViewAddress1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginTop="5dp"
-                    android:fontFamily="@font/open_sans"
-                    android:text="Grosvenor Rd" />
-
-                <TextView
-                    android:id="@+id/textViewAddress2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginTop="5dp"
-                    android:text="Rathmines" />
-
-                <TextView
-                    android:id="@+id/textViewCityTown"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginTop="5dp"
-                    android:text="Dublin" />
-
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/secondRow"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
-
-
-            <ImageView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center_horizontal"
-                android:src="@drawable/ic_schedule_24px" />
+                android:layout_marginBottom="15dp"
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/openingHoursTitle"
-                android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/textViewAddress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginBottom="6dp"
+                    android:fontFamily="@font/open_sans"
+                    android:text="Blanchardtowns Corporate Park Unit Ballycoolin, Dublin 15, Ireland"
+                    android:textColor="@android:color/black"
+                    android:textSize="12dp" />
+
+                <TextView
+                    android:id="@+id/textViewDistance"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/open_sans_bold"
+                    android:gravity="right"
+                    android:text="15km"
+                    android:textColor="@android:color/black"
+                    android:textSize="16dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:layout_marginLeft="5dp"
-                android:layout_weight="1"
-                android:text="@string/fuelstations_opening_hours_title" />
+                android:layout_marginBottom="15dp"
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/openTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:fontFamily="@font/open_sans"
-                android:text="Open Now" />
-            </TableRow>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="6dp"
+                    android:src="@drawable/ic_schedule_24px" />
 
+                <TextView
+                    android:id="@+id/textViewOpeningHoursTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/open_sans"
+                    android:gravity="left"
+                    android:text="Opening Hours"
+                    android:textColor="@android:color/black"
+                    android:textSize="16dp" />
 
-            <TextView
-                android:id="@+id/openTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:text="07:00am" />
+                <TextView
+                    android:id="@+id/textViewOpeningHours"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:fontFamily="@font/open_sans"
+                    android:gravity="center"
+                    android:text="6:00am - 12:00pm"
+                    android:textColor="@android:color/black"
+                    android:textSize="15dp" />
+            </LinearLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:text="-" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/closeTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginLeft="5dp"
-                android:text="12:00pm" />
-
-            <Button
-                android:id="@+id/buttonDirections"
-                android:drawableLeft="@drawable/ic_navigation_24px"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="22dp"
-                android:layout_marginBottom="16sp"
-                android:background="@color/colorPrimary"
-                android:fontFamily="@font/open_sans_bold"
-                android:text="@string/fuelstations_directions_button_name"
-                android:textColor="#fff"
-                android:textSize="18sp" />
-
-        </TableLayout>
+                <Button
+                    android:id="@+id/buttonDirections"
+                    android:layout_width="120dp"
+                    android:layout_height="35dp"
+                    android:layout_gravity="end"
+                    android:background="@drawable/button_background"
+                    android:drawableLeft="@drawable/ic_navigation_24px"
+                    android:fontFamily="@font/open_sans_bold"
+                    android:gravity="center"
+                    android:text="@string/fuelstations_directions_button_name"
+                    android:textColor="#fff"
+                    android:textSize="15sp" />
+            </LinearLayout>
+        </LinearLayout>
     </androidx.cardview.widget.CardView>
-</LinearLayout>
+</RelativeLayout>

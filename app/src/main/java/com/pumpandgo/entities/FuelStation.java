@@ -9,7 +9,7 @@ public class FuelStation {
     @Json(name = "fuel_station_id")
     int fuelStationId;
 
-    @Json(name = "fuel_station_name")
+    @Json(name = "name")
     String fuelStationName;
 
     @Json(name = "address1")
@@ -20,12 +20,6 @@ public class FuelStation {
 
     @Json(name = "city_town")
     String cityTown;
-
-    @Json(name = "telephone_no")
-    String telephoneNo;
-
-    @Json(name = "number_of_pumps")
-    int numberOfPumps;
 
     @Json(name = "longitude")
     double longitude;
@@ -43,13 +37,8 @@ public class FuelStation {
         return fuelStationId;
     }
 
-
     public String getFuelStationName() {
         return fuelStationName;
-    }
-
-    public void setFuelStationName(String fuelStationName) {
-        this.fuelStationName = fuelStationName;
     }
 
     public String getAddress1() {
@@ -64,14 +53,6 @@ public class FuelStation {
         return cityTown;
     }
 
-    public String getTelephoneNo() {
-        return telephoneNo;
-    }
-
-    public int getNumberOfPumps() {
-        return numberOfPumps;
-    }
-
     public double getLongitude() {
         return longitude;
     }
@@ -82,6 +63,10 @@ public class FuelStation {
 
     public double getDistance() {
         return distance;
+    }
+
+    public void setFuelStationName(String fuelStationName) {
+        this.fuelStationName = fuelStationName;
     }
 
     public void setFuelStationId(int fuelStationId) {
@@ -98,14 +83,6 @@ public class FuelStation {
 
     public void setCityTown(String cityTown) {
         this.cityTown = cityTown;
-    }
-
-    public void setTelephoneNo(String telephoneNo) {
-        this.telephoneNo = telephoneNo;
-    }
-
-    public void setNumberOfPumps(int numberOfPumps) {
-        this.numberOfPumps = numberOfPumps;
     }
 
     public void setLongitude(double longitude){
