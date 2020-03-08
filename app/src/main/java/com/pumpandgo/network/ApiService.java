@@ -6,6 +6,7 @@ import com.pumpandgo.entities.FuelStationResponse;
 import com.pumpandgo.entities.LocatingStationResponse;
 import com.pumpandgo.entities.PaymentMethodResponse;
 import com.pumpandgo.entities.PaymentTest;
+import com.pumpandgo.entities.TransactionHistoryResponse;
 import com.pumpandgo.entities.UserDetails;
 import com.pumpandgo.entities.VisitCountResponse;
 
@@ -48,6 +49,10 @@ public interface ApiService {
     @POST("getnearbystations")
     @FormUrlEncoded
     Call<FuelStationResponse> getNearbyStations(@Field("latitude") double latitude, @Field("longitude") double longitude, @Field("max_distance_limit") int maxDistanceLimit);
+
+    @POST("gettransactionhistory")
+    @FormUrlEncoded
+    Call<TransactionHistoryResponse> getTransactionHistory();
 
     @POST("updatename")
     @FormUrlEncoded

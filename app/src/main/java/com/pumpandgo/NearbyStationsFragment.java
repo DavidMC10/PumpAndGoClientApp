@@ -75,6 +75,7 @@ public class NearbyStationsFragment extends Fragment {
         return view;
     }
 
+    // Get fuel stations nearby.
     public void getNearbyFuelStations(){
         loader.setVisibility(View.VISIBLE);
         nearbyStationsRootLayout.setVisibility(View.INVISIBLE);
