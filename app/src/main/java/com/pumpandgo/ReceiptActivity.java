@@ -121,6 +121,7 @@ public class ReceiptActivity extends AppCompatActivity {
                     loader.setVisibility(View.INVISIBLE);
                     receiptRootLayout.setVisibility(View.VISIBLE);
 
+                    // Set text fields.
                     textViewFuelStationName.setText(response.body().getFuelStationName());
                     textViewAddress.setText(response.body().getFuelStationAddress1() + ", " + response.body().getfuelStationAddress2() + ", " + response.body().getfuelStationAddressCityTown());
                     textViewDateTime.setText(response.body().getTransactionDate());

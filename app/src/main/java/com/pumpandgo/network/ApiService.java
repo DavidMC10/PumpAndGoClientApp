@@ -7,6 +7,7 @@ import com.pumpandgo.entities.LocatingStationResponse;
 import com.pumpandgo.entities.PaymentMethodResponse;
 import com.pumpandgo.entities.PaymentTest;
 import com.pumpandgo.entities.ReceiptResponse;
+import com.pumpandgo.entities.RewardResponse;
 import com.pumpandgo.entities.TransactionHistoryResponse;
 import com.pumpandgo.entities.UserDetails;
 import com.pumpandgo.entities.VisitCountResponse;
@@ -35,6 +36,9 @@ public interface ApiService {
 
     @POST("visitcount")
     Call<VisitCountResponse> visitCount();
+
+    @POST("getrewards")
+    Call<RewardResponse> getRewards();
 
     @POST("testing")
     @FormUrlEncoded

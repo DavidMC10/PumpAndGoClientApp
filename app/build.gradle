@@ -55,4 +55,8 @@ dependencies {
 
     // Awesome Validation
     implementation 'com.basgeekball:awesome-validation:4.2'
+
+    // QR Code
+    implementation 'com.google.zxing:core:3.2.1'
+    implementation 'com.journeyapps:zxing-android-embedded:3.2.0@aar'
 }

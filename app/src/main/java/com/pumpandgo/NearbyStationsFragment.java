@@ -220,17 +220,6 @@ public class NearbyStationsFragment extends Fragment {
         } else {
             locationAlertDialog();
             requestPermissions();
-            if (getActivity() != null) {
-                View relativeLayout = getActivity().findViewById(R.id.nearbyStationsRootLayout);
-                TextView emptyFuelStations = new TextView(getContext());
-                emptyFuelStations.setText("There are no fuel stations nearby.");
-                emptyFuelStations.setTextAlignment(View.TEXT_ALIGNMENT_GRAVITY);
-                emptyFuelStations.setTextSize(20);
-                emptyFuelStations.setTextColor(Color.BLACK);
-                emptyFuelStations.setGravity(Gravity.CENTER);
-                emptyFuelStations.setLayoutParams(new Toolbar.LayoutParams(Toolbar.LayoutParams.MATCH_PARENT, Toolbar.LayoutParams.MATCH_PARENT));
-                ((RelativeLayout) relativeLayout).addView(emptyFuelStations);
-            }
         }
     }
 
@@ -249,7 +238,6 @@ public class NearbyStationsFragment extends Fragment {
                 mLocationRequest, mLocationCallback,
                 Looper.myLooper()
         );
-
     }
 
     // Get the location data.

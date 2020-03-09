@@ -450,6 +450,15 @@ public class PaymentMethodActivity extends AppCompatActivity {
         return true;
     }
 
+    // Kill activity when the back button is pressed.
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     // Cancels any api calls when the activity is destroyed.
     @Override
     protected void onDestroy() {
