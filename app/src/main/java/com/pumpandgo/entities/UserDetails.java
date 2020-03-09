@@ -13,9 +13,6 @@ public class UserDetails {
     @Json(name = "email")
     String email;
 
-    @Json(name = "max_fuel_limit")
-    int maxFuelLimit;
-
     @Json(name = "max_distance_limit")
     int maxDistanceLimit;
 
@@ -29,10 +26,6 @@ public class UserDetails {
 
     public String getEmail() {
         return email;
-    }
-
-    public int getMaxFuelLimit() {
-        return maxFuelLimit;
     }
 
     public int getMaxDistanceLimit() {
@@ -49,10 +42,6 @@ public class UserDetails {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public void setMaxFuelLimit(int maxFuelLimit) {
-        this.maxFuelLimit = maxFuelLimit;
     }
 
     public void setMaxDistanceLimit(int maxDistanceLimit) {

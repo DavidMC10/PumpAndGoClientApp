@@ -3,6 +3,8 @@ package com.pumpandgo;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -41,6 +43,11 @@ public class PaymentMethodActivity extends AppCompatActivity {
 
     private static final String TAG = "PaymentMethodActivity";
 
+    @BindView(R.id.progressBar)
+    ProgressBar loader;
+    @BindView(R.id.paymentMethodRootLayout)
+    LinearLayout paymentMethodRootLayout;
+
     // Declaration variables.
     Call call;
     ApiService service;
@@ -48,11 +55,6 @@ public class PaymentMethodActivity extends AppCompatActivity {
     List<PaymentMethod> paymentMethodList;
     ListView listView;
     String defaultPaymentMethod;
-
-    @BindView(R.id.progressBar)
-    ProgressBar loader;
-    @BindView(R.id.paymentMethodRootLayout)
-    LinearLayout paymentMethodRootLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +74,13 @@ public class PaymentMethodActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        // Set back arrow.
+        Drawable upArrow = getResources().getDrawable(R.drawable.ic_keyboard_backspace_24px);
+        upArrow.setColorFilter(getResources().getColor(R.color.colorPrimaryDark), PorterDuff.Mode.SRC_ATOP);
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         // Get access to the custom title view.
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbarTitle);

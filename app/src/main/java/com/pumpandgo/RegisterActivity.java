@@ -41,6 +41,7 @@ public class RegisterActivity extends AppCompatActivity {
     @BindView(R.id.progressBar)
     ProgressBar loader;
 
+    // Declaration variables.
     ApiService service;
     Call<AccessToken> call;
     AwesomeValidation validator;

@@ -40,17 +40,17 @@ public class SettingsFragment extends Fragment {
 
     private static final String TAG = "SettingsFragment";
 
+    @BindView(R.id.progressBar)
+    ProgressBar loader;
+    @BindView(R.id.settingsRootLayout)
+    LinearLayout settingsRootLayout;
+
     // Declaration variables.
     ApiService service;
     TokenManager tokenManager;
     Call<UserDetails> call;
     List<Setting> settingsList;
     ListView listView;
-
-    @BindView(R.id.progressBar)
-    ProgressBar loader;
-    @BindView(R.id.settingsRootLayout)
-    LinearLayout settingsRootLayout;
 
     @Nullable
     @Override

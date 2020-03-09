@@ -43,6 +43,7 @@ public class PurchaseFuelFragment extends Fragment {
     @BindView(R.id.progressBar)
     ProgressBar loader;
 
+    // Declaration Variables
     ApiService service;
     TokenManager tokenManager;
     Call<VisitCountResponse> call;

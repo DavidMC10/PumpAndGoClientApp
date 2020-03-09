@@ -5,7 +5,7 @@ import com.squareup.moshi.Json;
 public class TransactionHistory {
 
     @Json(name = "transaction_id")
-    String transactionId;
+    int transactionId;
 
     @Json(name = "fuel_station_name")
     String fuelStationName;
@@ -19,7 +19,7 @@ public class TransactionHistory {
     @Json(name = "number_of_litres")
     String numberOfLitres;
 
-    public String getTransactionId() {
+    public int getTransactionId() {
         return transactionId;
     }
 
@@ -39,7 +39,7 @@ public class TransactionHistory {
         return numberOfLitres ;
     }
 
-    public void setTransactionId(String transactionId) {
+    public void setTransactionId(int transactionId) {
         this.transactionId = transactionId;
     }
 

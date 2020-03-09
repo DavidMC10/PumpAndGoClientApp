@@ -15,6 +15,7 @@ public class PumpNumberActivity extends AppCompatActivity {
     private static final String TAG = "PumpNumberActivity";
     public static final int LOCATION_REQUEST = 101;
 
+    // Declaration Variables
     ApiService service;
     TokenManager tokenManager;
     Call<VisitCountResponse> call;
