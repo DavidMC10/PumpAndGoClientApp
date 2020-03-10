@@ -134,7 +134,6 @@ public class TransactionHistoryFragment extends Fragment {
                         loader.setVisibility(View.INVISIBLE);
                         transactionHistoryRootLayout.setVisibility(View.VISIBLE);
                         emptyTransactionHistory.setVisibility(View.VISIBLE);
-
                     }
                 } else {
                     // Ensure activity is not null.

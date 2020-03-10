@@ -59,10 +59,9 @@
     <!--layout_settings_list strings-->
     <string name="settings_list_edit">Edit</string>
 
-
     <!--nav_menu strings-->
-    <string name="nav_menu_purchase_fuel">Purchase Fuel</string>
-    <string name="nav_menu_nearby_stations">Nearby Stations</string>
+    <string name="nav_menu_purchase_fuel">Buy Fuel</string>
+    <string name="nav_menu_nearby_stations">Stations</string>
     <string name="nav_menu_rewards">Rewards</string>
     <string name="nav_menu_transactions">Transactions</string>
     <string name="nav_menu_settings">Settings</string>
