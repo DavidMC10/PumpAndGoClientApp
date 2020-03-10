@@ -22,8 +22,6 @@
         </activity>
         <activity android:name=".PumpNumberActivity">
         </activity>
-        <activity android:name=".LocatingStationActivity">
-        </activity>
         <activity android:name=".HomeActivity">
         </activity>
         <activity android:name=".ForgotPasswordActivity">
