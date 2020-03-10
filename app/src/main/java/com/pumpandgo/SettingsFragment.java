@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -18,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.pumpandgo.entities.Setting;
 import com.pumpandgo.entities.UserDetails;
@@ -39,11 +41,8 @@ import static android.content.Context.MODE_PRIVATE;
 public class SettingsFragment extends Fragment {
 
     private static final String TAG = "SettingsFragment";
-
-    @BindView(R.id.progressBar)
-    ProgressBar loader;
-    @BindView(R.id.settingsRootLayout)
-    LinearLayout settingsRootLayout;
+    private LinearLayout settingsRootLayout;
+    private ProgressBar loader;
 
     // Declaration variables.
     ApiService service;
@@ -64,6 +63,10 @@ public class SettingsFragment extends Fragment {
             startActivity(new Intent(getActivity(), LoginActivity.class));
             getActivity().finish();
         }
+
+        // Bind view.
+        settingsRootLayout = (LinearLayout) view.findViewById(R.id.settingsRootLayout);
+        loader = (ProgressBar) view.findViewById(R.id.progressBar);
 
         // Initialise objects.
         settingsList = new ArrayList<>();
@@ -94,17 +97,17 @@ public class SettingsFragment extends Fragment {
                 Log.w(TAG, "onResponse: " + response);
 
                 if (response.isSuccessful()) {
-                    loader.setVisibility(View.INVISIBLE);
-                    settingsRootLayout.setVisibility(View.VISIBLE);
-
-                    // Populating the list with values.
-                    settingsList.add(new Setting(R.drawable.ic_account_circle_24px, "Full Name", response.body().getFirstName() + " " + response.body().getLastName()));
-                    settingsList.add(new Setting(R.drawable.ic_email_24px, "Email", response.body().getEmail()));
-                    settingsList.add(new Setting(R.drawable.ic_lock_24px, "Password", "*********"));
-                    settingsList.add(new Setting(R.drawable.ic_noun_distance_24px, "Maximum Distance", String.valueOf(response.body().getMaxDistanceLimit()) + "KM"));
-
                     // Ensure activity is not null.
                     if (getActivity() != null) {
+                        loader.setVisibility(View.INVISIBLE);
+                        settingsRootLayout.setVisibility(View.VISIBLE);
+
+                        // Populating the list with values.
+                        settingsList.add(new Setting(R.drawable.ic_account_circle_24px, "Full Name", response.body().getFirstName() + " " + response.body().getLastName()));
+                        settingsList.add(new Setting(R.drawable.ic_email_24px, "Email", response.body().getEmail()));
+                        settingsList.add(new Setting(R.drawable.ic_lock_24px, "Password", "*********"));
+                        settingsList.add(new Setting(R.drawable.ic_noun_distance_24px, "Maximum Distance", String.valueOf(response.body().getMaxDistanceLimit()) + "KM"));
+
                         // Creating the adapter.
                         SettingsListAdapter adapter = new SettingsListAdapter(getActivity(), R.layout.layout_settings_list, settingsList);
 
@@ -113,9 +116,12 @@ public class SettingsFragment extends Fragment {
                     }
 
                 } else {
-                    tokenManager.deleteToken();
-                    startActivity(new Intent(getActivity(), LoginActivity.class));
-                    getActivity().finish();
+                    // Ensure activity is not null.
+                    if (getActivity() != null) {
+                        tokenManager.deleteToken();
+                        startActivity(new Intent(getActivity(), LoginActivity.class));
+                        getActivity().finish();
+                    }
                 }
             }
 
@@ -137,13 +143,19 @@ public class SettingsFragment extends Fragment {
                 Log.w(TAG, "onResponse: " + response);
                 // If successful reload the fragment or else delete the token and display the Login Activity.
                 if (response.isSuccessful()) {
-                    tokenManager.deleteToken();
-                    startActivity(new Intent(getActivity(), LoginActivity.class));
-                    getActivity().finish();
+                    // Ensure activity is not null.
+                    if (getActivity() != null) {
+                        tokenManager.deleteToken();
+                        startActivity(new Intent(getActivity(), LoginActivity.class));
+                        getActivity().finish();
+                    }
                 } else {
-                    tokenManager.deleteToken();
-                    startActivity(new Intent(getActivity(), LoginActivity.class));
-                    getActivity().finish();
+                    // Ensure activity is not null.
+                    if (getActivity() != null) {
+                        tokenManager.deleteToken();
+                        startActivity(new Intent(getActivity(), LoginActivity.class));
+                        getActivity().finish();
+                    }
                 }
             }
 

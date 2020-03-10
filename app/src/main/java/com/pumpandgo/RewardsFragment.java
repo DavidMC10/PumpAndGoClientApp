@@ -37,19 +37,12 @@ import static android.content.Context.MODE_PRIVATE;
 public class RewardsFragment extends Fragment {
 
     private static final String TAG = "RewardsFragment";
-
-    @BindView(R.id.progressBar)
-    ProgressBar loader;
-    @BindView(R.id.rewardsRootLayout)
-    LinearLayout rewardsRootLayout;
-    @BindView(R.id.textViewCoffeeDiscount)
-    TextView textViewCoffeeDiscount;
-    @BindView(R.id.textViewDeliDiscount)
-    TextView textViewDeliDiscount;
-    @BindView(R.id.textViewCarWashDiscount)
-    TextView textViewCarWashDiscount;
-    @BindView(R.id.textViewFuelDiscount)
-    TextView textViewFuelDiscount;
+    private LinearLayout rewardsRootLayout;
+    private TextView textViewCoffeeDiscount;
+    private TextView textViewDeliDiscount;
+    private TextView textViewCarWashDiscount;
+    private TextView textViewFuelDiscount;
+    private ProgressBar loader;
 
     // Declaration variables.
     ApiService service;
@@ -69,6 +62,14 @@ public class RewardsFragment extends Fragment {
             startActivity(new Intent(getActivity(), LoginActivity.class));
             getActivity().finish();
         }
+
+        // Bind view.
+        rewardsRootLayout = (LinearLayout) view.findViewById(R.id.rewardsRootLayout);
+        textViewCoffeeDiscount = (TextView) view.findViewById(R.id.textViewCoffeeDiscount);
+        textViewDeliDiscount = (TextView) view.findViewById(R.id.textViewDeliDiscount);
+        textViewCarWashDiscount = (TextView) view.findViewById(R.id.textViewCarWashDiscount);
+        textViewFuelDiscount = (TextView) view.findViewById(R.id.textViewFuelDiscount);
+        loader = (ProgressBar) view.findViewById(R.id.progressBar);
 
         // Find the toolbar view inside the activity layout.
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
@@ -95,32 +96,38 @@ public class RewardsFragment extends Fragment {
                 Log.w(TAG, "onResponse: " + response);
 
                 if (response.isSuccessful()) {
-                    loader.setVisibility(View.INVISIBLE);
-                    rewardsRootLayout.setVisibility(View.VISIBLE);
+                    // Ensure activity is not null.
+                    if (getActivity() != null) {
+                        loader.setVisibility(View.INVISIBLE);
+                        rewardsRootLayout.setVisibility(View.VISIBLE);
 
-                    // Set the Qr Code.
-                    String barcodeNumber = response.body().getBarcodeNumber();
-                    ImageView image = getView().findViewById(R.id.imageViewQrCode);
-                    MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
-                    try {
-                        BitMatrix bitMatrix = multiFormatWriter.encode(barcodeNumber, BarcodeFormat.QR_CODE,800,600);
-                        BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
-                        Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
-                        image.setImageBitmap(bitmap);
-                    } catch (WriterException e) {
-                        e.printStackTrace();
+                        // Set the Qr Code.
+                        String barcodeNumber = response.body().getBarcodeNumber();
+                        ImageView image = getView().findViewById(R.id.imageViewQrCode);
+                        MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
+                        try {
+                            BitMatrix bitMatrix = multiFormatWriter.encode(barcodeNumber, BarcodeFormat.QR_CODE, 800, 600);
+                            BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
+                            Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
+                            image.setImageBitmap(bitmap);
+                        } catch (WriterException e) {
+                            e.printStackTrace();
+                        }
+
+                        // Set text fields.
+                        textViewCoffeeDiscount.setText(response.body().getCofffeeDiscountPercentage() + "% off of coffee on each fuel transaction");
+                        textViewDeliDiscount.setText(response.body().getDeliDiscountPercentage() + "% off the deli on each fuel transaction");
+                        textViewCarWashDiscount.setText(response.body().getCarWashDiscountPercentage() + "% off the a carwash on each fuel transaction");
+                        textViewFuelDiscount.setText(response.body().getFuelDiscountPercentage() + "% off fuel on every 10th fuel transaction");
                     }
 
-                    // Set text fields.
-                    textViewCoffeeDiscount.setText(response.body().getCofffeeDiscountPercentage() + "% off of coffee on each fuel transaction");
-                    textViewDeliDiscount.setText(response.body().getDeliDiscountPercentage() + "% off the deli on each fuel transaction");
-                    textViewCarWashDiscount.setText(response.body().getCarWashDiscountPercentage() + "% off the a carwash on each fuel transaction");
-                    textViewFuelDiscount.setText(response.body().getFuelDiscountPercentage() + "% off fuel on every 10th fuel transaction");
-
                 } else {
-                    tokenManager.deleteToken();
-                    startActivity(new Intent(getActivity(), LoginActivity.class));
-                    getActivity().finish();
+                    // Ensure activity is not null.
+                    if (getActivity() != null) {
+                        tokenManager.deleteToken();
+                        startActivity(new Intent(getActivity(), LoginActivity.class));
+                        getActivity().finish();
+                    }
                 }
             }
 

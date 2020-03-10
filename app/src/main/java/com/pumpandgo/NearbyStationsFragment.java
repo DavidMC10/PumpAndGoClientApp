@@ -2,7 +2,6 @@ package com.pumpandgo;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -23,11 +22,12 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -40,7 +40,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.pumpandgo.entities.FuelStation;
 import com.pumpandgo.entities.FuelStationResponse;
-import com.pumpandgo.entities.Setting;
 import com.pumpandgo.entities.UserDetails;
 import com.pumpandgo.network.ApiService;
 import com.pumpandgo.network.RetrofitBuilder;
@@ -58,14 +57,15 @@ import static android.content.Context.MODE_PRIVATE;
 public class NearbyStationsFragment extends Fragment {
 
     private static final String TAG = "NearbyStationsFragment";
+    private RelativeLayout nearbyStationsRootLayout;
+    private RecyclerView fuelStationRecyclerView;
+    private TextView emptyFuelStations;
+    private TextView invalidPermissions;
+    private ProgressBar loader;
+
     int PERMISSION_ID = 44;
     double latitude;
     double longitude;
-
-    @BindView(R.id.progressBar)
-    ProgressBar loader;
-    @BindView(R.id.nearbyStationsRootLayout)
-    RelativeLayout nearbyStationsRootLayout;
 
     // Declaration variables.
     FusedLocationProviderClient mFusedLocationClient;
@@ -100,6 +100,33 @@ public class NearbyStationsFragment extends Fragment {
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbarTitle);
         mTitle.setText("Nearby Fuel Stations");
 
+        // Bind view.
+        fuelStationRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        nearbyStationsRootLayout = (RelativeLayout) view.findViewById(R.id.nearbyStationsRootLayout);
+        loader = (ProgressBar) view.findViewById(R.id.progressBar);
+
+        emptyFuelStations = new TextView(getContext());
+        emptyFuelStations.setText("There are no fuel stations nearby.");
+        emptyFuelStations.setTextAlignment(View.TEXT_ALIGNMENT_GRAVITY);
+        emptyFuelStations.setTextSize(20);
+        emptyFuelStations.setTextColor(Color.BLACK);
+        emptyFuelStations.setGravity(Gravity.CENTER);
+        emptyFuelStations.setLayoutParams(new Toolbar.LayoutParams(Toolbar.LayoutParams.MATCH_PARENT, Toolbar.LayoutParams.MATCH_PARENT));
+        nearbyStationsRootLayout.addView(emptyFuelStations);
+        emptyFuelStations.setVisibility(View.INVISIBLE);
+
+        invalidPermissions = new TextView(getContext());
+        invalidPermissions.setText("Please ensure Location permissions are enabled and GPS is switched on.");
+        invalidPermissions.setTextAlignment(View.TEXT_ALIGNMENT_GRAVITY);
+        invalidPermissions.setTextSize(20);
+        invalidPermissions.setTextColor(Color.BLACK);
+        invalidPermissions.setGravity(Gravity.CENTER);
+        invalidPermissions.setLayoutParams(new Toolbar.LayoutParams(Toolbar.LayoutParams.MATCH_PARENT, Toolbar.LayoutParams.MATCH_PARENT));
+        nearbyStationsRootLayout.addView(invalidPermissions);
+        invalidPermissions.setVisibility(View.INVISIBLE);
+
+        fuelStationRecyclerView.setVisibility(View.VISIBLE);
+
         getLastLocation();
 
         return view;
@@ -115,13 +142,18 @@ public class NearbyStationsFragment extends Fragment {
                 Log.w(TAG, "onResponse: " + response);
 
                 if (response.isSuccessful()) {
-                    int maxDistanceLimit = response.body().getMaxDistanceLimit();
-                    getNearbyFuelStations(maxDistanceLimit);
-
+                    // Ensure activity is not null.
+                    if (getActivity() != null) {
+                        int maxDistanceLimit = response.body().getMaxDistanceLimit();
+                        getNearbyFuelStations(maxDistanceLimit);
+                    }
                 } else {
-                    tokenManager.deleteToken();
-                    startActivity(new Intent(getActivity(), LoginActivity.class));
-                    getActivity().finish();
+                    // Ensure activity is not null.
+                    if (getActivity() != null) {
+                        tokenManager.deleteToken();
+                        startActivity(new Intent(getActivity(), LoginActivity.class));
+                        getActivity().finish();
+                    }
                 }
             }
 
@@ -133,21 +165,22 @@ public class NearbyStationsFragment extends Fragment {
     }
 
     // Get fuel stations nearby.
-    public void getNearbyFuelStations(int maxDistanceLimit){
+    public void getNearbyFuelStations(int maxDistanceLimit) {
         loader.setVisibility(View.VISIBLE);
         nearbyStationsRootLayout.setVisibility(View.INVISIBLE);
-        call = service.getNearbyStations(latitude,longitude, maxDistanceLimit);
+        call = service.getNearbyStations(latitude, longitude, maxDistanceLimit);
         call.enqueue(new Callback<FuelStationResponse>() {
             @Override
             public void onResponse(Call<FuelStationResponse> call, Response<FuelStationResponse> response) {
-                Log.w(TAG, "onResponse: " + response );
+                Log.w(TAG, "onResponse: " + response);
 
-                if(response.isSuccessful()){
-                    loader.setVisibility(View.INVISIBLE);
-                    nearbyStationsRootLayout.setVisibility(View.VISIBLE);
+                if (response.isSuccessful()) {
                     // Ensure activity is not null.
                     if (getActivity() != null) {
-
+                        loader.setVisibility(View.INVISIBLE);
+                        fuelStationRecyclerView.setVisibility(View.VISIBLE);
+                        nearbyStationsRootLayout.setVisibility(View.VISIBLE);
+                        emptyFuelStations.setVisibility(View.INVISIBLE);
                         fuelStationList = response.body().getData();
                         // Set Recycler View.
                         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
@@ -161,19 +194,12 @@ public class NearbyStationsFragment extends Fragment {
                         recyclerView.setAdapter(adapter);
                     }
                 } else if (response.code() == 404) {
-                    loader.setVisibility(View.INVISIBLE);
-                    nearbyStationsRootLayout.setVisibility(View.VISIBLE);
                     // Ensure activity is not null.
                     if (getActivity() != null) {
-                        View relativeLayout = getActivity().findViewById(R.id.nearbyStationsRootLayout);
-                        TextView emptyFuelStations = new TextView(getContext());
-                        emptyFuelStations.setText("There are no fuel stations nearby.");
-                        emptyFuelStations.setTextAlignment(View.TEXT_ALIGNMENT_GRAVITY);
-                        emptyFuelStations.setTextSize(20);
-                        emptyFuelStations.setTextColor(Color.BLACK);
-                        emptyFuelStations.setGravity(Gravity.CENTER);
-                        emptyFuelStations.setLayoutParams(new Toolbar.LayoutParams(Toolbar.LayoutParams.MATCH_PARENT, Toolbar.LayoutParams.MATCH_PARENT));
-                        ((RelativeLayout) relativeLayout).addView(emptyFuelStations);
+                        loader.setVisibility(View.INVISIBLE);
+                        nearbyStationsRootLayout.setVisibility(View.VISIBLE);
+                        fuelStationRecyclerView.setVisibility(View.INVISIBLE);
+                        emptyFuelStations.setVisibility(View.VISIBLE);
                     }
                 } else {
                     // Ensure activity is not null.
@@ -184,9 +210,10 @@ public class NearbyStationsFragment extends Fragment {
                     }
                 }
             }
+
             @Override
             public void onFailure(Call<FuelStationResponse> call, Throwable t) {
-                Log.w(TAG, "onFailure: " + t.getMessage() );
+                Log.w(TAG, "onFailure: " + t.getMessage());
             }
         });
 
@@ -194,7 +221,7 @@ public class NearbyStationsFragment extends Fragment {
 
     // Get the user's last location.
     @SuppressLint("MissingPermission")
-    private void getLastLocation(){
+    private void getLastLocation() {
         if (checkPermissions()) {
             if (isLocationEnabled()) {
                 mFusedLocationClient.getLastLocation().addOnCompleteListener(
@@ -208,6 +235,7 @@ public class NearbyStationsFragment extends Fragment {
                                     latitude = location.getLatitude();
                                     longitude = location.getLongitude();
                                     getUserProfileDetails();
+                                    invalidPermissions.setVisibility(View.INVISIBLE);
                                 }
                             }
                         }
@@ -216,17 +244,17 @@ public class NearbyStationsFragment extends Fragment {
                 Toast.makeText(getContext(), "Turn on location", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 startActivity(intent);
+                invalidPermissions.setVisibility(View.VISIBLE);
             }
         } else {
-            locationAlertDialog();
             requestPermissions();
+            invalidPermissions.setVisibility(View.VISIBLE);
         }
     }
 
     // Request new location data for the user.
     @SuppressLint("MissingPermission")
-    private void requestNewLocationData(){
-
+    private void requestNewLocationData() {
         LocationRequest mLocationRequest = new LocationRequest();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationRequest.setInterval(0);
@@ -287,28 +315,11 @@ public class NearbyStationsFragment extends Fragment {
         }
     }
 
-    // If permissions or GPS is disabled, show the user a dialog.
-    public void locationAlertDialog() {
-        AlertDialog.Builder locationAlertDialog = new AlertDialog.Builder(getContext());
-        locationAlertDialog.setMessage("Please ensure Location permissions are enabled and GPS is switched on");
-        locationAlertDialog.setCancelable(true);
-        locationAlertDialog.setPositiveButton(
-                "OK",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-        AlertDialog alert = locationAlertDialog.create();
-        alert.show();
-    }
-
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         if (checkPermissions()) {
             getLastLocation();
         }
     }
-
 }

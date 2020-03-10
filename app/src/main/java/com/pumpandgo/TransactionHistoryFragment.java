@@ -39,11 +39,10 @@ import static android.content.Context.MODE_PRIVATE;
 public class TransactionHistoryFragment extends Fragment {
 
     private static final String TAG = "TransactionHistoryFragment";
-
-    @BindView(R.id.progressBar)
-    ProgressBar loader;
-    @BindView(R.id.transactionHistoryRootLayout)
-    RelativeLayout transactionHistoryRootLayout;
+    private RelativeLayout transactionHistoryRootLayout;
+    private RecyclerView transactionHistoryRecyclerView;
+    private TextView emptyTransactionHistory;
+    private ProgressBar loader;
 
     // Declaration variables.
     FusedLocationProviderClient mFusedLocationClient;
@@ -79,6 +78,21 @@ public class TransactionHistoryFragment extends Fragment {
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
 
+        // Bind view.
+        loader = (ProgressBar) view.findViewById(R.id.progressBar);
+        transactionHistoryRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        transactionHistoryRootLayout = (RelativeLayout) view.findViewById(R.id.transactionHistoryRootLayout);
+        emptyTransactionHistory = new TextView(getContext());
+        emptyTransactionHistory.setText("You don't have any transactions.");
+        emptyTransactionHistory.setTextAlignment(View.TEXT_ALIGNMENT_GRAVITY);
+        emptyTransactionHistory.setTextSize(20);
+        emptyTransactionHistory.setTextColor(Color.BLACK);
+        emptyTransactionHistory.setGravity(Gravity.CENTER);
+        emptyTransactionHistory.setLayoutParams(new Toolbar.LayoutParams(Toolbar.LayoutParams.MATCH_PARENT, Toolbar.LayoutParams.MATCH_PARENT));
+        transactionHistoryRootLayout.addView(emptyTransactionHistory);
+        transactionHistoryRecyclerView.setVisibility(View.VISIBLE);
+        emptyTransactionHistory.setVisibility(View.INVISIBLE);
+
         getTransactionHistory();
         return view;
     }
@@ -91,13 +105,15 @@ public class TransactionHistoryFragment extends Fragment {
         call.enqueue(new Callback<TransactionHistoryResponse>() {
             @Override
             public void onResponse(Call<TransactionHistoryResponse> call, Response<TransactionHistoryResponse> response) {
-                Log.w(TAG, "onResponse: " + response );
+                Log.w(TAG, "onResponse: " + response);
 
-                if(response.isSuccessful()){
-                    loader.setVisibility(View.INVISIBLE);
-                    transactionHistoryRootLayout.setVisibility(View.VISIBLE);
+                if (response.isSuccessful()) {
                     // Ensure activity is not null.
                     if (getActivity() != null) {
+                        loader.setVisibility(View.INVISIBLE);
+                        transactionHistoryRootLayout.setVisibility(View.VISIBLE);
+                        emptyTransactionHistory.setVisibility(View.INVISIBLE);
+
                         // Get Transaction History list.
                         transactionHistoryList = response.body().getData();
 
@@ -113,19 +129,12 @@ public class TransactionHistoryFragment extends Fragment {
                         recyclerView.setAdapter(adapter);
                     }
                 } else if (response.code() == 404) {
-                    loader.setVisibility(View.INVISIBLE);
-                    transactionHistoryRootLayout.setVisibility(View.VISIBLE);
                     // Ensure activity is not null.
                     if (getActivity() != null) {
-                        View relativeLayout = getActivity().findViewById(R.id.transactionHistoryRootLayout);
-                        TextView emptyTransactions = new TextView(getContext());
-                        emptyTransactions.setText("You don't have any transactions.");
-                        emptyTransactions.setTextAlignment(View.TEXT_ALIGNMENT_GRAVITY);
-                        emptyTransactions.setTextSize(20);
-                        emptyTransactions.setTextColor(Color.BLACK);
-                        emptyTransactions.setGravity(Gravity.CENTER);
-                        emptyTransactions.setLayoutParams(new Toolbar.LayoutParams(Toolbar.LayoutParams.MATCH_PARENT, Toolbar.LayoutParams.MATCH_PARENT));
-                        ((RelativeLayout) relativeLayout).addView(emptyTransactions);
+                        loader.setVisibility(View.INVISIBLE);
+                        transactionHistoryRootLayout.setVisibility(View.VISIBLE);
+                        emptyTransactionHistory.setVisibility(View.VISIBLE);
+
                     }
                 } else {
                     // Ensure activity is not null.
@@ -136,9 +145,10 @@ public class TransactionHistoryFragment extends Fragment {
                     }
                 }
             }
+
             @Override
             public void onFailure(Call<TransactionHistoryResponse> call, Throwable t) {
-                Log.w(TAG, "onFailure: " + t.getMessage() );
+                Log.w(TAG, "onFailure: " + t.getMessage());
             }
         });
     }
