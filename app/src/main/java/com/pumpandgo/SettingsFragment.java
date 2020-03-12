@@ -52,6 +52,8 @@ public class SettingsFragment extends Fragment {
         tokenManager = TokenManager.getInstance(this.getActivity().getSharedPreferences("prefs", MODE_PRIVATE));
         service = RetrofitBuilder.createServiceWithAuth(ApiService.class, tokenManager);
 
+        ButterKnife.bind(this, view);
+
         if (tokenManager.getToken() == null) {
             startActivity(new Intent(getActivity(), LoginActivity.class));
             getActivity().finish();

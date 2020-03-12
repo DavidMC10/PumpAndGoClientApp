@@ -1,54 +1,87 @@
 package com.pumpandgo;
 
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.NumberPicker;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
-import com.pumpandgo.entities.VisitCountResponse;
-import com.pumpandgo.network.ApiService;
-import com.pumpandgo.network.RetrofitBuilder;
-
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import retrofit2.Call;
 
 public class PumpNumberActivity extends AppCompatActivity {
     private static final String TAG = "PumpNumberActivity";
     public static final int LOCATION_REQUEST = 101;
+    private NumberPicker pumpNumberPicker;
+    private Button buttonContinue;
 
-    // Declaration Variables
-    ApiService service;
-    TokenManager tokenManager;
-    Call<VisitCountResponse> call;
+    int fuelStationId = 0;
+    String fuelStationName;
+    int numberOfPumps;
+    int pumpNumber;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pumpnumber);
 
-//        ButterKnife.bind(this);
-        tokenManager = TokenManager.getInstance(getSharedPreferences("prefs", MODE_PRIVATE));
-        service = RetrofitBuilder.createServiceWithAuth(ApiService.class, tokenManager);
+        ButterKnife.bind(this);
 
-        if (tokenManager.getToken() == null) {
-            startActivity(new Intent(this, LoginActivity.class));
-            finish();
-        }
+        fuelStationId = getIntent().getIntExtra("FUEL_STATION_ID",0);
+        fuelStationName = getIntent().getStringExtra("FUEL_STATION_NAME");
+        numberOfPumps = getIntent().getIntExtra("NUMBER_OF_PUMPS", 0);
 
-//        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-//        getSupportActionBar().setCustomView(R.layout.layout_actionbar);
-////        getSupportActionBar().setTitle("Texaco Dublin Road");
-//
-//        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+        Log.d("fuwelstat", fuelStationName);
+
+        // View binding.
+        pumpNumberPicker = (NumberPicker) findViewById(R.id.pumpNumberNumberPicker);
+        pumpNumberPicker.setMinValue(1);
+        pumpNumberPicker.setMaxValue(numberOfPumps);
+        buttonContinue = (Button) findViewById(R.id.buttonContinue);
+
+        // Find the toolbar view inside the activity layout.
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        // Set back arrow.
+        Drawable upArrow = getResources().getDrawable(R.drawable.ic_keyboard_backspace_24px);
+        upArrow.setColorFilter(getResources().getColor(R.color.colorPrimaryDark), PorterDuff.Mode.SRC_ATOP);
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        // Get access to the custom title view.
+        TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbarTitle);
+        mTitle.setText(fuelStationName);
     }
 
-    // Cancels any api calls when the activity is destroyed.
+    // Allows the user to go to the fuel amount activity.
+    @OnClick(R.id.buttonContinue)
+    public void goToFuelAmountActivity() {
+        Intent intent = new Intent(this, FuelAmountActivity.class);
+        pumpNumber = pumpNumberPicker.getValue();
+        intent.putExtra("FUEL_STATION_ID", fuelStationId);
+        intent.putExtra("FUEL_STATION_NAME", fuelStationName);
+        intent.putExtra("PUMP_NUMBER", pumpNumber);
+        startActivity(intent);
+    }
+
+    // Kill activity when the back button is pressed.
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (call != null) {
-            call.cancel();
-            call = null;
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
         }
+        return super.onOptionsItemSelected(item);
     }
 
     // Go back to the Home Activity when the back button is pressed.
@@ -58,37 +91,3 @@ public class PumpNumberActivity extends AppCompatActivity {
         finish();
     }
 }
-
-//    public void getNumberOfPumps() {
-//
-//        call = service.getNearbyStations(53.304857,-6.304662, 20);
-//        call.enqueue(new Callback<FuelStationResponse>() {
-//            @Override
-//            public void onResponse(Call<FuelStationResponse> call, Response<FuelStationResponse> response) {
-//                Log.w(TAG, "onResponse: " + response );
-//
-//                if(response.isSuccessful()){
-//                    fuelStationList = response.body().getData();
-//                    recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-//                    recyclerView.setHasFixedSize(true);
-//                    recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-//                    //creating recyclerview adapter
-//                    FuelStationAdapter adapter = new FuelStationAdapter(getContext(), fuelStationList);
-//
-//                    //setting adapter to recyclerview
-//                    recyclerView.setAdapter(adapter);
-//                    Log.d(TAG, response.body().getData().get(0).getAddress1());
-//                    Log.d(TAG, response.body().getData().get(0).getData().get(0).getDay());
-//                } else {
-//                    tokenManager.deleteToken();
-//                    startActivity(new Intent(getActivity(), LoginActivity.class));
-//                    getActivity().finish();
-//                }
-//            }
-//            @Override
-//            public void onFailure(Call<FuelStationResponse> call, Throwable t) {
-//                Log.w(TAG, "onFailure: " + t.getMessage() );
-//            }
-//        });
-
-//    }

@@ -108,6 +108,16 @@ public interface ApiService {
     @FormUrlEncoded
     Call<Void> setDefaultPaymentMethod(@Field("default_payment_method") String cardId);
 
+    @POST("post")
+    Call<Void> testSocket();
+
     @POST("retrievepaymentmethods")
     Call<PaymentMethodResponse> getPaymentMethods();
+
+    @POST("createcharge")
+    @FormUrlEncoded
+    Call<Void> createCharge(@Field("fuel_amount") int fuelAmount);
+
+    @POST("createtransaction")
+    Call<Void> createTransaction();
 }

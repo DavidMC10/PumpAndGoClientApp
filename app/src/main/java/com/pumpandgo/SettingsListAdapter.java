@@ -477,6 +477,7 @@ public class SettingsListAdapter extends ArrayAdapter<Setting> {
         // Set Number Picker Attributes.
         maxDistanceNumberPicker.setMinValue(0);
         maxDistanceNumberPicker.setMaxValue(19);
+        maxDistanceNumberPicker.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
         maxDistanceNumberPicker.setWrapSelectorWheel(false);
         maxDistanceNumberPicker.setDisplayedValues(numberPickerArray);
 

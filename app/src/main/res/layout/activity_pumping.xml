@@ -10,7 +10,7 @@
         android:layout_height="wrap_content" />
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:layout_marginLeft="40dp"
@@ -20,47 +20,25 @@
         <TextView
             android:id="@+id/titleLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="34dp"
             android:fontFamily="@font/open_sans_bold"
             android:gravity="center"
-            android:text="@string/pump_number_select_pump_title"
+            android:text="Now Fuelling"
             android:textColor="@color/colorAccent"
             android:textSize="26sp" />
 
         <TextView
+            android:id="@+id/textViewChangePaymentMethod"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:fontFamily="@font/open_sans"
+            android:layout_marginBottom="20dp"
+            android:fontFamily="@font/open_sans_bold"
             android:gravity="center"
-            android:text="@string/pump_number_select_pump_message"
+            android:text="Change Payment Method"
             android:textColor="@color/colorAccent"
             android:textSize="14sp" />
-
-        <NumberPicker
-            android:id="@+id/pumpNumberNumberPicker"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:descendantFocusability="blocksDescendants"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="120dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="150dp"
-            android:theme="@style/NumberPickerText" />
-
-
-        <Button
-            android:id="@+id/buttonContinue"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="22dp"
-            android:background="@color/colorPrimary"
-            android:fontFamily="@font/open_sans_bold"
-            android:text="@string/pump_number_payment_button_text"
-            android:textColor="#ffffff"
-            android:textSize="18sp" />
     </LinearLayout>
 
 </FrameLayout>

@@ -2,6 +2,7 @@ package com.pumpandgo;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -10,11 +11,13 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Looper;
 import android.provider.Settings;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -24,9 +27,13 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -35,11 +42,14 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.pumpandgo.entities.DefaultPaymentMethodResponse;
 import com.pumpandgo.entities.LocatingStationResponse;
 import com.pumpandgo.entities.VisitCountResponse;
 import com.pumpandgo.network.ApiService;
 import com.pumpandgo.network.RetrofitBuilder;
 
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -52,7 +62,6 @@ public class PurchaseFuelFragment extends Fragment {
     private RelativeLayout purchaseFuelRootLayout;
     private LinearLayout purchaseFuelContainer;
     private TextView invalidPermissions;
-    private TextView fuelStation;
     private TextView textViewTitle;
     private TextView textViewAtFuelStation;
     private TextView textViewFirstName;
@@ -62,8 +71,12 @@ public class PurchaseFuelFragment extends Fragment {
     private ProgressBar loader;
 
     int PERMISSION_ID = 44;
+    int fuelStationId = 0;
+    String fuelStationName;
+    int numberOfPumps;
     double latitude;
     double longitude;
+    String defaultPaymentMethod;
 
     // Declaration Variables
     FusedLocationProviderClient mFusedLocationClient;
@@ -79,6 +92,7 @@ public class PurchaseFuelFragment extends Fragment {
         tokenManager = TokenManager.getInstance(this.getActivity().getSharedPreferences("prefs", MODE_PRIVATE));
         service = RetrofitBuilder.createServiceWithAuth(ApiService.class, tokenManager);
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
+        ButterKnife.bind(this, view);
 
         // View binding.
         purchaseFuelRootLayout = (RelativeLayout) view.findViewById(R.id.purchaseFuelRootLayout);
@@ -127,6 +141,9 @@ public class PurchaseFuelFragment extends Fragment {
                 if (response.isSuccessful()) {
                     // Ensure activity is not null.
                     if (getActivity() != null) {
+                        fuelStationId = response.body().getFuelStationId();
+                        fuelStationName = response.body().getFuelStationName();
+                        numberOfPumps = response.body().getNumberOfPumps();
                         textViewAtFuelStation.setText("You are are at " + response.body().getFuelStationName());
                         imageViewBuyFuel.setImageResource(R.drawable.start_payment_image);
                         getVisitCount();
@@ -155,6 +172,7 @@ public class PurchaseFuelFragment extends Fragment {
         });
     }
 
+    // Get the user's visit count.
     public void getVisitCount() {
         call = service.visitCount();
         call.enqueue(new Callback<VisitCountResponse>() {
@@ -172,9 +190,7 @@ public class PurchaseFuelFragment extends Fragment {
                         textViewVisitCount.setText(String.valueOf(response.body().getVisitCount()) + " visits to go");
                     }
                     textViewEndingText.setText("to unlock your fuel reward");
-                    loader.setVisibility(View.INVISIBLE);
-                    purchaseFuelRootLayout.setVisibility(View.VISIBLE);
-                    purchaseFuelContainer.setVisibility(View.VISIBLE);
+                    getDefaultPaymentMethod();
                 } else {
                     tokenManager.deleteToken();
                     startActivity(new Intent(getActivity(), LoginActivity.class));
@@ -187,6 +203,70 @@ public class PurchaseFuelFragment extends Fragment {
                 Log.w(TAG, "onFailure: " + t.getMessage());
             }
         });
+    }
+
+    // Gets the user's default payment method.
+    public void getDefaultPaymentMethod() {
+        call = service.getDefaultPaymentMethod();
+        call.enqueue(new Callback<DefaultPaymentMethodResponse>() {
+            @Override
+            public void onResponse(Call<DefaultPaymentMethodResponse> call, Response<DefaultPaymentMethodResponse> response) {
+                Log.w(TAG, "onResponse: " + response);
+                if (response.isSuccessful()) {
+                    defaultPaymentMethod = response.body().getCardId();
+                    loader.setVisibility(View.INVISIBLE);
+                    purchaseFuelRootLayout.setVisibility(View.VISIBLE);
+                    purchaseFuelContainer.setVisibility(View.VISIBLE);
+                } else if (response.code() == 404) {
+                    loader.setVisibility(View.INVISIBLE);
+                    purchaseFuelRootLayout.setVisibility(View.VISIBLE);
+                    purchaseFuelContainer.setVisibility(View.VISIBLE);
+                } else {
+                    tokenManager.deleteToken();
+                    startActivity(new Intent(getActivity(), LoginActivity.class));
+                    getActivity().finish();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DefaultPaymentMethodResponse> call, Throwable t) {
+                Log.w(TAG, "onFailure: " + t.getMessage());
+            }
+        });
+    }
+
+    // Loads the PumpNumber Activity.
+    @OnClick(R.id.imageViewBuyFuel)
+    public void goToPumpNumberActivity() {
+        // If no fuel station has been located then load the NearbyStationsFragment.
+        if (fuelStationId != 0) {
+            // If there is no default payment method then display an error message.
+            if (TextUtils.isEmpty(defaultPaymentMethod)) {
+                AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+                alertDialog.setTitle("Error:");
+                alertDialog.setMessage("A payment method must be added to continue.");
+                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                alertDialog.show();
+
+                // Change button colour.
+                Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+                positiveButton.setTextColor(getContext().getResources().getColor(R.color.colorPrimary));
+            } else {
+                Intent intent = new Intent(getContext(), PumpNumberActivity.class);
+                intent.putExtra("FUEL_STATION_ID", fuelStationId);
+                intent.putExtra("FUEL_STATION_NAME", fuelStationName);
+                intent.putExtra("NUMBER_OF_PUMPS", numberOfPumps);
+                getContext().startActivity(intent);
+            }
+        } else {
+            getActivity().findViewById(R.id.navigationNearbyStations).performClick();
+        }
+
     }
 
     // Get the user's last location.

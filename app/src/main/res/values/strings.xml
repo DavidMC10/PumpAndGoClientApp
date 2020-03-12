@@ -20,7 +20,10 @@
     <string name="pump_number_select_pump_message">Make sure you are parked at this pump and remain in your vehicle</string>
     <string name="pump_number_fuelling_amount_text">Your Maximum Fuelling Amount:</string>
     <string name="pump_number_payment_method_text">Change Payment Method</string>
-    <string name="pump_number_payment_button_text">AUTHORIZE TRANSACTION</string>
+    <string name="pump_number_payment_button_text">CONTINUE</string>
+
+    <!--activity_fuelamount strings-->
+    <string name="fuel_amount_select_fuel_amount_title">Select your Fuel Amount</string>
 
     <!--activity_register strings-->
     <string name="register_first_name_title">FIRST NAME:</string>
