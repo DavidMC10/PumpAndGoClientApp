@@ -31,7 +31,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:fontFamily="@font/open_sans_bold"
-                    android:text="Texaco Station and Spar Shop"
+                    android:text="@string/fuelstations_name"
                     android:textColor="@android:color/black"
                     android:textSize="16dp" />
 
@@ -40,7 +40,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/open_sans_bold"
-                    android:text="€30"
+                    android:text="@string/fuelstations_price"
                     android:textColor="@android:color/black"
                     android:textSize="16dp" />
             </LinearLayout>
@@ -56,7 +56,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:fontFamily="@font/open_sans"
-                    android:text="20/05/2020"
+                    android:text="@string/fuelstations_date"
                     android:textColor="@android:color/black"
                     android:textSize="16dp" />
 
@@ -65,7 +65,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/open_sans"
-                    android:text="33.70"
+                    android:text="@string/fuelstations_number_of_litres"
                     android:textColor="@android:color/black"
                     android:textSize="16dp" />
             </LinearLayout>

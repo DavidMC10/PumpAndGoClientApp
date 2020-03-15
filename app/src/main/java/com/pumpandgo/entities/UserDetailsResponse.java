@@ -2,7 +2,7 @@ package com.pumpandgo.entities;
 
 import com.squareup.moshi.Json;
 
-public class UserDetails {
+public class UserDetailsResponse {
 
     @Json(name = "first_name")
     String firstName;

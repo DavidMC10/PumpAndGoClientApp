@@ -24,6 +24,41 @@
 
     <!--activity_fuelamount strings-->
     <string name="fuel_amount_select_fuel_amount_title">Select your Fuel Amount</string>
+    <string name="fuel_amount_change_paymentmethod_title">Change Payment Method</string>
+    <string name="fuel_amount_authorise_button_title">AUTHORISE</string>
+
+    <!--activity_pumping strings-->
+    <string name="pumping_fuelling_title">Now Fuelling</string>
+    <string name="pumping_pump_title">Pump</string>
+    <string name="pumping_pump_number_title">4</string>
+    <string name="pumping_warning_message">Please leave your phone in the vehicle while fuelling</string>
+
+    <!--activity_receipt strings-->
+    <string name="receipt_fuelstation_name">Circle K Marcelo</string>
+    <string name="receipt_fuelstation_address">Monastery, Co. Wicklow, Ireland</string>
+    <string name="receipt_datetime">26/05/2019, 17:30</string>
+    <string name="receipt_name_title">Name</string>
+    <string name="receipt_fullname">David McElhinney</string>
+    <string name="receipt_paymentmethod_title">Payment Method</string>
+    <string name="receipt_paymentmethod">Mastercard ending in 7100</string>
+    <string name="receipt_pumpnumber_title">Pump Number</string>
+    <string name="receipt_pumpnumber">2</string>
+    <string name="receipt_fueltype_title">Fuel Type</string>
+    <string name="receipt_fueltype">Unleaded</string>
+    <string name="receipt_fuelamount_title">Fuel Amount</string>
+    <string name="receipt_fuelamount">30.70 litre</string>
+    <string name="receipt_pricelitre_title">Price/Litre</string>
+    <string name="receipt_pricelitre">€1.08</string>
+    <string name="receipt_discount_title">Discount</string>
+    <string name="receipt_discount">0%</string>
+    <string name="receipt_vatrate_title">VAT Rate</string>
+    <string name="receipt_vatrate">20%</string>
+    <string name="receipt_exvat_title">Ex VAT</string>
+    <string name="receipt_exvat">€28.00</string>
+    <string name="receipt_vat_title">VAT</string>
+    <string name="receipt_vat">€7.00</string>
+    <string name="receipt_total_title">Total</string>
+    <string name="receipt_total">€35.00</string>
 
     <!--activity_register strings-->
     <string name="register_first_name_title">FIRST NAME:</string>
@@ -40,9 +75,23 @@
     <string name="register_need_account_title">Need an account?</string>
     <string name="register_return_login_title">Login Here</string>
 
+    <!--fragment_purchasefuel strings-->
+    <string name="purchasefuel_welcome_message">Good Afternoon</string>
+    <string name="purchasefuel_user_firstname">David</string>
+    <string name="purchasefuel_fuelstation_message">You are not currently at a fuel station</string>
+    <string name="purchasefuel_visitcount">7 visits to go</string>
+    <string name="purchasefuel_reward_message">to unlock your fuel reward</string>
+
     <!--fragment_locatingstation strings-->
     <string name="locatingstation_locating">Locating</string>
     <string name="locatingstation_station">Your Filling Station</string>
+
+    <!--fragment_reward strings-->
+    <string name="reward_qr_code_message">Scan this QR code inside any store in order to redeem your loyalty.</string>
+    <string name="reward_coffee_discount_message">10% off of coffee on each fuel transaction</string>
+    <string name="reward_deli_discount_message">10% off the deli on each fuel transaction</string>
+    <string name="reward_carwash_discount_message">10% off a car wash on each fuel transaction</string>
+    <string name="reward_fuel_discount_message">15% off fuel on every 10th fuel transaction</string>
 
     <!--fragment_settings strings-->
     <string name="settings_fragment_title">Settings</string>
@@ -56,10 +105,23 @@
     <string name="settings_user_log_out_title">Log Out</string>
 
     <!--layout_fuelstations strings-->
+    <string name="fuelstations_name">Texaco Station and Spar Shop</string>
+    <string name="fuelstations_address">Blanchardtowns Corporate Park Unit Ballycoolin, Dublin 15, Ireland</string>
+    <string name="fuelstations_distance">15KM</string>
     <string name="fuelstations_opening_hours_title">Opening Hours</string>
+    <string name="fuelstations_opening_hours">6:00am - 12:00pm</string>
     <string name="fuelstations_directions_button_name">Start</string>
+    <string name="fuelstations_price">€30</string>
+    <string name="fuelstations_date">20/05/2020</string>
+    <string name="fuelstations_number_of_litres">33.70</string>
+
+    <!--layout_paymentmethod_list strings-->
+    <string name="paymentmethod_brand">Mastercard</string>
+    <string name="paymentmethod_last4">ending in 6333</string>
 
     <!--layout_settings_list strings-->
+    <string name="settings_list_name_title">Full Name</string>
+    <string name="settings_list_name">David McElhinney</string>
     <string name="settings_list_edit">Edit</string>
 
     <!--nav_menu strings-->

@@ -1,11 +1,8 @@
 package com.pumpandgo;
 
 import android.content.Intent;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -15,10 +12,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.pumpandgo.entities.ReceiptResponse;
+import com.pumpandgo.entities.TransactionIdResponse;
 import com.pumpandgo.network.ApiService;
 import com.pumpandgo.network.RetrofitBuilder;
 
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -27,8 +26,8 @@ import retrofit2.Response;
  * Created by David McElhinney on 14/03/2020.
  */
 
-public class ReceiptActivity extends AppCompatActivity {
-    private static final String TAG = "ReceiptActivity";
+public class TransactionCompleteActivity extends AppCompatActivity {
+    private static final String TAG = "TransactionCompleteActivity";
 
     // Declare layout fields.
     private LinearLayout receiptRootLayout;
@@ -51,12 +50,12 @@ public class ReceiptActivity extends AppCompatActivity {
     // Initialise objects.
     ApiService service;
     TokenManager tokenManager;
-    Call<ReceiptResponse> call;
+    Call call;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_receipt);
+        setContentView(R.layout.activity_transactioncomplete);
 
         ButterKnife.bind(this);
         tokenManager = TokenManager.getInstance(getSharedPreferences("prefs", MODE_PRIVATE));
@@ -91,32 +90,54 @@ public class ReceiptActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        // Set back arrow.
-        Drawable upArrow = getResources().getDrawable(R.drawable.ic_keyboard_backspace_24px);
-        upArrow.setColorFilter(getResources().getColor(R.color.colorPrimaryDark), PorterDuff.Mode.SRC_ATOP);
-        getSupportActionBar().setHomeAsUpIndicator(upArrow);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-
         // Get access to the custom title view.
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbarTitle);
         mTitle.setText("Receipt");
 
-        // Get data from TransactionHistoryListAdapter.
-        int transactionId = getIntent().getIntExtra("TRANSACTION_ID",0);
+        // Make Api call.
+        getRecentTransactionId();
+    }
 
-        if (transactionId != 0) {
-            // Make Api call.
-            getReceipt(transactionId);
-        }
+    // Gets the user's most recent transaction id.
+    public void getRecentTransactionId() {
+        loader.setVisibility(View.VISIBLE);
+        receiptRootLayout.setVisibility(View.INVISIBLE);
+        call = service.getRecentTransactionId();
+        call.enqueue(new Callback<TransactionIdResponse>() {
+
+            @Override
+            public void onResponse(Call<TransactionIdResponse> call, Response<TransactionIdResponse> response) {
+                Log.w(TAG, "onResponse: " + response);
+
+                if (response.isSuccessful()) {
+                    // Ensure activity is not null.
+                    if (getApplicationContext() != null) {
+                        int transactionId = response.body().getTransactionId();
+                        getReceipt(transactionId);
+                    }
+                } else {
+                    // Ensure activity is not null.
+                    if (getApplicationContext() != null) {
+                        tokenManager.deleteToken();
+                        startActivity(new Intent(TransactionCompleteActivity.this, LoginActivity.class));
+                        finish();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TransactionIdResponse> call, Throwable t) {
+                Log.w(TAG, "onFailure: " + t.getMessage());
+            }
+        });
     }
 
     // Gets a receipt for the user's transaction.
     public void getReceipt(int transactionId) {
-        loader.setVisibility(View.VISIBLE);
-        receiptRootLayout.setVisibility(View.INVISIBLE);
+        Log.d("transactionid", String.valueOf(transactionId));
         call = service.getReceipt(transactionId);
         call.enqueue(new Callback<ReceiptResponse>() {
+
             @Override
             public void onResponse(Call<ReceiptResponse> call, Response<ReceiptResponse> response) {
                 Log.w(TAG, "onResponse: " + response);
@@ -147,7 +168,7 @@ public class ReceiptActivity extends AppCompatActivity {
                     // Ensure activity is not null.
                     if (getApplicationContext() != null) {
                         tokenManager.deleteToken();
-                        startActivity(new Intent(ReceiptActivity.this, LoginActivity.class));
+                        startActivity(new Intent(TransactionCompleteActivity.this, LoginActivity.class));
                         finish();
                     }
                 }
@@ -160,13 +181,14 @@ public class ReceiptActivity extends AppCompatActivity {
         });
     }
 
-    // Kill activity when the back button is pressed.
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
+    // Loads the PumpNumber Activity.
+    @OnClick(R.id.buttonContinue)
+    public void goToHomeActivity() {
+        // Ensure activity is not null.
+        if (getApplicationContext() != null) {
+            startActivity(new Intent(TransactionCompleteActivity.this, HomeActivity.class));
             finish();
         }
-        return super.onOptionsItemSelected(item);
     }
 
     // Cancels any api calls when the activity is destroyed.
@@ -179,4 +201,3 @@ public class ReceiptActivity extends AppCompatActivity {
         }
     }
 }
-

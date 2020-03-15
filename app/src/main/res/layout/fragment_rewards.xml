@@ -38,9 +38,8 @@
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
                 android:layout_marginBottom="8dp"
-                android:text="Scan this QR code inside any
-store in order to redeem your loyalty."
-                android:textColor="#000000"
+                android:text="@string/reward_qr_code_message"
+                android:textColor="@android:color/black"
                 android:textSize="16dp" />
 
             <TableLayout
@@ -83,7 +82,7 @@ store in order to redeem your loyalty."
                                 android:gravity="left"
                                 android:paddingLeft="6dp"
                                 android:paddingRight="6dp"
-                                android:text="10% off of coffee on each fuel transaction"
+                                android:text="@string/reward_coffee_discount_message"
                                 android:textColor="@android:color/black"
                                 android:textSize="14dp" />
                         </LinearLayout>
@@ -118,7 +117,7 @@ store in order to redeem your loyalty."
                                 android:gravity="left"
                                 android:paddingLeft="6dp"
                                 android:paddingRight="6dp"
-                                android:text="10% off the deli on each fuel transaction"
+                                android:text="@string/reward_deli_discount_message"
                                 android:textColor="@android:color/black"
                                 android:textSize="14dp" />
 
@@ -159,7 +158,7 @@ store in order to redeem your loyalty."
                                 android:gravity="left"
                                 android:paddingLeft="6dp"
                                 android:paddingRight="6dp"
-                                android:text="10% off a car wash on each fuel transaction"
+                                android:text="@string/reward_carwash_discount_message"
                                 android:textColor="@android:color/black"
                                 android:textSize="14dp" />
                         </LinearLayout>
@@ -193,7 +192,7 @@ store in order to redeem your loyalty."
                                 android:gravity="left"
                                 android:paddingLeft="6dp"
                                 android:paddingRight="6dp"
-                                android:text="15% off fuel on every 10th fuel transaction"
+                                android:text="@string/reward_fuel_discount_message"
                                 android:textColor="@android:color/black"
                                 android:textSize="14dp" />
 

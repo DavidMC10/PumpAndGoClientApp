@@ -2,11 +2,7 @@ package com.pumpandgo;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
-import android.widget.NumberPicker;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,17 +24,27 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class PumpActivity extends AppCompatActivity {
+/**
+ * Created by David McElhinney on 14/03/2020.
+ */
 
+public class PumpActivity extends AppCompatActivity {
     private static final String TAG = "PumpActivity";
+
+    // Declare layout fields.
+    private TextView textViewPumpNumber;
+    private TextView textViewFuelAmount;
+
+    // Initialise variables.
+    private int fuelStationId;
+    private String fuelStationName;
+    private int fuelAmount;
+    private int pumpNumber;
+
+    // Initialise objects.
     ApiService service;
     TokenManager tokenManager;
     Call<Void> call;
-    private TextView testing;
-    private int fuelStationId;
-    private String fuelStationName;
-    private int pumpNumber;
-    private ProgressBar loader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,17 +55,22 @@ public class PumpActivity extends AppCompatActivity {
         tokenManager = TokenManager.getInstance(getSharedPreferences("prefs", MODE_PRIVATE));
         service = RetrofitBuilder.createServiceWithAuth(ApiService.class, tokenManager);
 
+        // If no token go to the Login Activity.
         if (tokenManager.getToken() == null) {
             startActivity(new Intent(this, LoginActivity.class));
             finish();
         }
 
+        // Get data from the previous activity.
         fuelStationId = getIntent().getIntExtra("FUEL_STATION_ID", 0);
         fuelStationName = getIntent().getStringExtra("FUEL_STATION_NAME");
+        fuelAmount = getIntent().getIntExtra("FUEL_AMOUNT", 0);
         pumpNumber = getIntent().getIntExtra("PUMP_NUMBER", 0);
 
-        // View binding.
-        testing = (TextView) findViewById(R.id.titleLayout);
+        // View bindings.
+        textViewFuelAmount = (TextView) findViewById(R.id.textViewFuelAmount);
+        textViewPumpNumber = (TextView) findViewById(R.id.textViewPumpNumber);
+        textViewPumpNumber.setText(String.valueOf(pumpNumber));
 
         // Find the toolbar view inside the activity layout.
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -70,18 +81,18 @@ public class PumpActivity extends AppCompatActivity {
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbarTitle);
         mTitle.setText(fuelStationName);
 
+
+        // Set pusher details.
         PusherOptions options = new PusherOptions();
         options.setCluster("eu");
         Pusher pusher = new Pusher("25ce4a082b0080ec345e", options);
 
+        // Connect to the websocket.
         pusher.connect(new ConnectionEventListener() {
             @Override
             public void onConnectionStateChange(ConnectionStateChange change) {
                 System.out.println("State changed from " + change.getPreviousState() +
                         " to " + change.getCurrentState());
-
-                Log.d("Current State", change.getCurrentState().toString());
-                Log.d("Previous State", change.getPreviousState().toString());
             }
 
             @Override
@@ -91,65 +102,57 @@ public class PumpActivity extends AppCompatActivity {
                         "\nmessage: " + message +
                         "\nException: " + e
                 );
-
-                Log.d("error", message);
             }
         }, ConnectionState.ALL);
 
-        Channel channel = pusher.subscribe("my-channel");
-
-        channel.bind("my-event", new SubscriptionEventListener() {
+        // Get the websocket data from the fuel_pump channel.
+        Channel channel = pusher.subscribe("fuel_pump");
+        channel.bind("pumping", new SubscriptionEventListener() {
             @Override
             public void onEvent(PusherEvent event) {
-                String yes = event.getData();
-                updateText(yes);
-                System.out.println("Received event with data: " + event.getData().toString());
-                Log.d("event", event.getData().toString());
+                String pumpData = event.getData();
+                pumpData = pumpData.substring(22, pumpData.length() - 2);
+                if (pumpData.equals("finished") == false) {
+                    updateCurrentFuelAmount("€" + pumpData);
+                } else {
+                    startActivity(new Intent(PumpActivity.this, TransactionCompleteActivity.class));
+                    finish();
+                }
             }
         });
 
-        runOnUiThread(new Runnable() {
-
-            @Override
-            public void run() {
-
-                // Stuff that updates the UI
-
-            }
-        });
+        // Make the Api call.
         startPumping();
     }
 
-    public void updateText(String yes) {
+    // Updates the current fuel data.
+    public void updateCurrentFuelAmount(String pumpData) {
         runOnUiThread(new Runnable() {
-
             @Override
             public void run() {
-
-                // Stuff that updates the UI
-                testing.setText(yes);
+                // Update the UI with the pump data.
+                textViewFuelAmount.setText(pumpData);
             }
         });
-
     }
 
-
-    // Gets a receipt for the user's transaction.
+    // Creates the user transaction and starts the fuel pump.
     public void startPumping() {
-
-        call = service.createTransaction();
+        call = service.createTransaction(fuelStationId, fuelAmount, pumpNumber);
         call.enqueue(new Callback<Void>() {
-
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 Log.w(TAG, "onResponse: " + response);
 
                 if (response.isSuccessful()) {
-
+                    // Do nothing.
                 } else {
-                    tokenManager.deleteToken();
-                    startActivity(new Intent(PumpActivity.this, LoginActivity.class));
-                    finish();
+                    // Ensure activity is not null.
+                    if (getApplicationContext() != null) {
+                        tokenManager.deleteToken();
+                        startActivity(new Intent(PumpActivity.this, LoginActivity.class));
+                        finish();
+                    }
                 }
             }
 
@@ -160,6 +163,7 @@ public class PumpActivity extends AppCompatActivity {
         });
     }
 
+    // Do nothing on back button pressed.
     @Override
     public void onBackPressed() {
         // Do nothing.

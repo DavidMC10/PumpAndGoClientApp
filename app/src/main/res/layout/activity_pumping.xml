@@ -12,33 +12,88 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
         android:layout_marginLeft="40dp"
+        android:layout_marginTop="40dp"
         android:layout_marginRight="40dp"
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/titleLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="34dp"
             android:fontFamily="@font/open_sans_bold"
             android:gravity="center"
-            android:text="Now Fuelling"
+            android:text="@string/pumping_fuelling_title"
             android:textColor="@color/colorAccent"
             android:textSize="26sp" />
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="80dp"
+            android:layout_marginRight="40dp"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/pumpCircle"
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:layout_marginBottom="20dp"
+                android:src="@drawable/pumping_image" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="80dp"
+                android:fontFamily="@font/open_sans_bold"
+                android:layout_alignLeft="@id/pumpCircle"
+                android:layout_alignTop="@id/pumpCircle"
+                android:layout_alignRight="@id/pumpCircle"
+                android:layout_alignBottom="@id/pumpCircle"
+                android:gravity="center"
+                android:text="@string/pumping_pump_title"
+                android:textColor="@color/colorAccent"
+                android:textSize="22sp" />
+
+            <TextView
+                android:id="@+id/textViewPumpNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/pumpCircle"
+                android:layout_alignTop="@id/pumpCircle"
+                android:layout_alignRight="@id/pumpCircle"
+                android:layout_alignBottom="@id/pumpCircle"
+                android:fontFamily="@font/open_sans_bold"
+                android:gravity="center"
+                android:text="@string/pumping_pump_number_title"
+                android:textColor="@color/colorAccent"
+                android:textSize="26sp" />
+
+            <TextView
+                android:id="@+id/textViewFuelAmount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="80dp"
+                android:layout_alignLeft="@id/pumpCircle"
+                android:layout_alignTop="@id/pumpCircle"
+                android:layout_alignRight="@id/pumpCircle"
+                android:layout_alignBottom="@id/pumpCircle"
+                android:fontFamily="@font/open_sans_bold"
+                android:gravity="center"
+                android:textColor="@color/colorAccent"
+                android:textSize="26sp" />
+        </RelativeLayout>
+
         <TextView
-            android:id="@+id/textViewChangePaymentMethod"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginBottom="20dp"
-            android:fontFamily="@font/open_sans_bold"
+            android:layout_marginTop="180dp"
+            android:fontFamily="@font/open_sans"
             android:gravity="center"
-            android:text="Change Payment Method"
+            android:text="@string/pumping_warning_message"
             android:textColor="@color/colorAccent"
-            android:textSize="14sp" />
+            android:textSize="18sp" />
     </LinearLayout>
-
 </FrameLayout>

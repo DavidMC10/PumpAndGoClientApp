@@ -15,10 +15,14 @@ import com.pumpandgo.network.RetrofitBuilder;
 
 import retrofit2.Call;
 
-public class HomeActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
+/**
+ * Created by David McElhinney on 14/03/2020.
+ */
 
+public class HomeActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = "HomeActivity";
 
+    // Initialise objects.
     ApiService service;
     TokenManager tokenManager;
     Call<AccessToken> call;
@@ -27,6 +31,8 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        service = RetrofitBuilder.createService(ApiService.class);
+        tokenManager = TokenManager.getInstance(getSharedPreferences("prefs", MODE_PRIVATE));
 
         // Load the default fragment.
         loadFragment(new PurchaseFuelFragment());
@@ -35,9 +41,7 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
         BottomNavigationView navigation = findViewById(R.id.bottomNavigationView);
         navigation.setOnNavigationItemSelectedListener(this);
 
-        service = RetrofitBuilder.createService(ApiService.class);
-        tokenManager = TokenManager.getInstance(getSharedPreferences("prefs", MODE_PRIVATE));
-
+        // If no token go to the Login Activity.
         if (tokenManager.getToken().getAccessToken() == null) {
             startActivity(new Intent(HomeActivity.this, LoginActivity.class));
             finish();

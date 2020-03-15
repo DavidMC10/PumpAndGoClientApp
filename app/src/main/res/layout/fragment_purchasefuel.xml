@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff">
+    android:background="@android:color/white">
 
     <RelativeLayout
         android:id="@+id/purchaseFuelRootLayout"
@@ -22,9 +22,8 @@
                 android:layout_height="match_parent"
                 android:fontFamily="@font/open_sans"
                 android:gravity="center"
-                android:text="Good Afternoon"
-                android:textColor="#000000"
-                android:textColorHint="#CCCCCC"
+                android:text="@string/purchasefuel_welcome_message"
+                android:textColor="@android:color/black"
                 android:textSize="36sp" />
 
             <TextView
@@ -34,9 +33,8 @@
                 android:layout_marginBottom="16dp"
                 android:fontFamily="@font/open_sans"
                 android:gravity="center"
-                android:text="Alyd"
-                android:textColor="#000000"
-                android:textColorHint="#CCCCCC"
+                android:text="@string/purchasefuel_user_firstname"
+                android:textColor="@android:color/black"
                 android:textSize="26sp" />
 
             <TextView
@@ -45,9 +43,8 @@
                 android:layout_height="match_parent"
                 android:fontFamily="@font/open_sans"
                 android:gravity="center"
-                android:text="You are not currently at a fuel station"
-                android:textColor="#000000"
-                android:textColorHint="#CCCCCC"
+                android:text="@string/purchasefuel_fuelstation_message"
+                android:textColor="@android:color/black"
                 android:textSize="20sp" />
 
             <ImageView
@@ -62,24 +59,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="34dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginLeft="16dp"
                 android:fontFamily="@font/open_sans_bold"
                 android:gravity="center"
-                android:text="7 visits to go"
-                android:textColor="@color/colorAccent"
+                android:text="@string/purchasefuel_visitcount"
+                android:textColor="@android:color/black"
                 android:textSize="26sp" />
 
             <TextView
                 android:id="@+id/textViewEndingText"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/textViewVisitCount"
                 android:fontFamily="@font/open_sans"
                 android:gravity="center"
-                android:text="to unlock your fuel reward"
-                android:textColor="@color/colorAccent"
+                android:text="@string/purchasefuel_reward_message"
+                android:textColor="@android:color/black"
                 android:textSize="24sp" />
         </LinearLayout>
-
     </RelativeLayout>
 
     <ProgressBar

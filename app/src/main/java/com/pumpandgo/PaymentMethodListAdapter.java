@@ -38,15 +38,16 @@ import static android.content.Context.MODE_PRIVATE;
  */
 
 public class PaymentMethodListAdapter extends ArrayAdapter<PaymentMethod> {
-
     private static final String TAG = "PaymentMethodListAdapter";
 
-    // Declaration variables.
+    // Initialise objects.
     Call call;
     ApiService service;
     TokenManager tokenManager;
     List<PaymentMethod> paymentMethodList;
     Context context;
+
+    // Initialise variables.
     int resource;
     String defaultPaymentMethod;
 

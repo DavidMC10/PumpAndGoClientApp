@@ -26,7 +26,6 @@ import com.pumpandgo.entities.RewardResponse;
 import com.pumpandgo.network.ApiService;
 import com.pumpandgo.network.RetrofitBuilder;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -34,9 +33,14 @@ import retrofit2.Response;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class RewardsFragment extends Fragment {
+/**
+ * Created by David McElhinney on 14/03/2020.
+ */
 
+public class RewardsFragment extends Fragment {
     private static final String TAG = "RewardsFragment";
+
+    // Declare layout fields.
     private LinearLayout rewardsRootLayout;
     private TextView textViewCoffeeDiscount;
     private TextView textViewDeliDiscount;
@@ -44,7 +48,7 @@ public class RewardsFragment extends Fragment {
     private TextView textViewFuelDiscount;
     private ProgressBar loader;
 
-    // Declaration variables.
+    // Initialise objects.
     ApiService service;
     TokenManager tokenManager;
     Call<RewardResponse> call;
@@ -53,17 +57,17 @@ public class RewardsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_rewards, container, false);
-        ButterKnife.bind(this, view);
-
         tokenManager = TokenManager.getInstance(this.getActivity().getSharedPreferences("prefs", MODE_PRIVATE));
         service = RetrofitBuilder.createServiceWithAuth(ApiService.class, tokenManager);
+        ButterKnife.bind(this, view);
 
+        // If no token go to the Login Activity.
         if (tokenManager.getToken() == null) {
             startActivity(new Intent(getActivity(), LoginActivity.class));
             getActivity().finish();
         }
 
-        // Bind view.
+        // View bindings.
         rewardsRootLayout = (LinearLayout) view.findViewById(R.id.rewardsRootLayout);
         textViewCoffeeDiscount = (TextView) view.findViewById(R.id.textViewCoffeeDiscount);
         textViewDeliDiscount = (TextView) view.findViewById(R.id.textViewDeliDiscount);
@@ -80,6 +84,7 @@ public class RewardsFragment extends Fragment {
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbarTitle);
         mTitle.setText("Rewards");
 
+        // Make Api call.
         getRewards();
         return view;
     }

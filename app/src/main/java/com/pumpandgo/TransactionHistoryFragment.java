@@ -34,15 +34,20 @@ import retrofit2.Response;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class TransactionHistoryFragment extends Fragment {
+/**
+ * Created by David McElhinney on 14/03/2020.
+ */
 
+public class TransactionHistoryFragment extends Fragment {
     private static final String TAG = "TransactionHistoryFragment";
+
+    // Declare layout fields.
     private RelativeLayout transactionHistoryRootLayout;
     private RecyclerView transactionHistoryRecyclerView;
     private TextView emptyTransactionHistory;
     private ProgressBar loader;
 
-    // Declaration variables.
+    // Initialise objects.
     FusedLocationProviderClient mFusedLocationClient;
     ApiService service;
     TokenManager tokenManager;
@@ -57,7 +62,9 @@ public class TransactionHistoryFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_transactionhistory, container, false);
         tokenManager = TokenManager.getInstance(this.getActivity().getSharedPreferences("prefs", MODE_PRIVATE));
         service = RetrofitBuilder.createServiceWithAuth(ApiService.class, tokenManager);
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
 
+        // If no token go to the Login Activity.
         if (tokenManager.getToken() == null) {
             startActivity(new Intent(getActivity(), LoginActivity.class));
             getActivity().finish();
@@ -72,12 +79,12 @@ public class TransactionHistoryFragment extends Fragment {
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbarTitle);
         mTitle.setText("Transactions");
 
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
-
-        // Bind view.
+        // View bindings.
         loader = (ProgressBar) view.findViewById(R.id.progressBar);
         transactionHistoryRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         transactionHistoryRootLayout = (RelativeLayout) view.findViewById(R.id.transactionHistoryRootLayout);
+
+        // Create TextView programatically.
         emptyTransactionHistory = new TextView(getContext());
         emptyTransactionHistory.setText("You don't have any transactions.");
         emptyTransactionHistory.setTextAlignment(View.TEXT_ALIGNMENT_GRAVITY);
@@ -89,6 +96,7 @@ public class TransactionHistoryFragment extends Fragment {
         transactionHistoryRecyclerView.setVisibility(View.VISIBLE);
         emptyTransactionHistory.setVisibility(View.INVISIBLE);
 
+        // Make Api call.
         getTransactionHistory();
         return view;
     }

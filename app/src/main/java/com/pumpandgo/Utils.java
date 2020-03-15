@@ -9,6 +9,10 @@ import java.lang.annotation.Annotation;
 import okhttp3.ResponseBody;
 import retrofit2.Converter;
 
+/**
+ * Created by David McElhinney on 14/03/2020.
+ */
+
 public class Utils {
 
     public static ApiError converErrors(ResponseBody response){

@@ -33,27 +33,31 @@ import com.pumpandgo.network.RetrofitBuilder;
 
 import java.util.List;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class PaymentMethodActivity extends AppCompatActivity {
 
+/**
+ * Created by David McElhinney on 14/03/2020.
+ */
+
+public class PaymentMethodActivity extends AppCompatActivity {
     private static final String TAG = "PaymentMethodActivity";
 
-    @BindView(R.id.progressBar)
-    ProgressBar loader;
-    @BindView(R.id.paymentMethodRootLayout)
-    LinearLayout paymentMethodRootLayout;
+    // Declare layout fields.
+    private LinearLayout paymentMethodRootLayout;
+    private ProgressBar loader;
 
-    // Declaration variables.
+    // Initialise objects.
     Call call;
     ApiService service;
     TokenManager tokenManager;
     List<PaymentMethod> paymentMethodList;
     ListView listView;
+
+    // Initialise variable.
     String defaultPaymentMethod;
 
     @Override
@@ -65,10 +69,15 @@ public class PaymentMethodActivity extends AppCompatActivity {
         service = RetrofitBuilder.createServiceWithAuth(ApiService.class, tokenManager);
         ButterKnife.bind(this);
 
+        // If no token go to the Login Activity.
         if (tokenManager.getToken() == null) {
             startActivity(new Intent(this, LoginActivity.class));
             finish();
         }
+
+        // View bindings.
+        paymentMethodRootLayout = (LinearLayout) findViewById(R.id.paymentMethodRootLayout);
+        loader = (ProgressBar) findViewById(R.id.progressBar);
 
         // Find the toolbar view inside the activity layout
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -97,14 +106,23 @@ public class PaymentMethodActivity extends AppCompatActivity {
             public void onResponse(Call<DefaultPaymentMethodResponse> call, Response<DefaultPaymentMethodResponse> response) {
                 Log.w(TAG, "onResponse: " + response);
                 if (response.isSuccessful()) {
-                    defaultPaymentMethod = response.body().getCardId();
-                    getPaymentMethods();
+                    // Ensure activity is not null.
+                    if (getApplicationContext() != null) {
+                        defaultPaymentMethod = response.body().getCardId();
+                        getPaymentMethods();
+                    }
                 } else if (response.code() == 404) {
-                    getPaymentMethods();
+                    // Ensure activity is not null.
+                    if (getApplicationContext() != null) {
+                        getPaymentMethods();
+                    }
                 } else {
-                    tokenManager.deleteToken();
-                    startActivity(new Intent(PaymentMethodActivity.this, LoginActivity.class));
-                    finish();
+                    // Ensure activity is not null.
+                    if (getApplicationContext() != null) {
+                        tokenManager.deleteToken();
+                        startActivity(new Intent(PaymentMethodActivity.this, LoginActivity.class));
+                        finish();
+                    }
                 }
             }
 
@@ -127,35 +145,44 @@ public class PaymentMethodActivity extends AppCompatActivity {
                 Log.w(TAG, "onResponse: " + response);
 
                 if (response.isSuccessful()) {
-                    loader.setVisibility(View.INVISIBLE);
-                    paymentMethodRootLayout.setVisibility(View.VISIBLE);
-                    paymentMethodList = response.body().getData();
+                    // Ensure activity is not null.
+                    if (getApplicationContext() != null) {
+                        loader.setVisibility(View.INVISIBLE);
+                        paymentMethodRootLayout.setVisibility(View.VISIBLE);
+                        paymentMethodList = response.body().getData();
 
-                    // Initializing objects.
-                    listView = (ListView) findViewById(R.id.listView);
+                        // Initializing objects.
+                        listView = (ListView) findViewById(R.id.listView);
 
-                    // Creating the adapter.
-                    PaymentMethodListAdapter adapter = new PaymentMethodListAdapter(PaymentMethodActivity.this, R.layout.layout_paymentmethod_list, paymentMethodList, defaultPaymentMethod);
+                        // Creating the adapter.
+                        PaymentMethodListAdapter adapter = new PaymentMethodListAdapter(PaymentMethodActivity.this, R.layout.layout_paymentmethod_list, paymentMethodList, defaultPaymentMethod);
 
-                    // Attaching adapter to the listview.
-                    listView.setAdapter(adapter);
-
+                        // Attaching adapter to the listview.
+                        listView.setAdapter(adapter);
+                    }
                 } else if (response.code() == 404) {
-                    loader.setVisibility(View.INVISIBLE);
-                    paymentMethodRootLayout.setVisibility(View.VISIBLE);
-                    View linearLayout = findViewById(R.id.paymentMethodRootLayout);
-                    TextView emptyPaymentMethods = new TextView(getApplication());
-                    emptyPaymentMethods.setText("You don't have any payment methods.");
-                    emptyPaymentMethods.setTextAlignment(View.TEXT_ALIGNMENT_GRAVITY);
-                    emptyPaymentMethods.setTextSize(20);
-                    emptyPaymentMethods.setTextColor(Color.BLACK);
-                    emptyPaymentMethods.setGravity(Gravity.CENTER);
-                    emptyPaymentMethods.setLayoutParams(new Toolbar.LayoutParams(Toolbar.LayoutParams.MATCH_PARENT, Toolbar.LayoutParams.MATCH_PARENT));
-                    ((LinearLayout) linearLayout).addView(emptyPaymentMethods);
+                    // Ensure activity is not null.
+                    if (getApplicationContext() != null) {
+                        loader.setVisibility(View.INVISIBLE);
+                        paymentMethodRootLayout.setVisibility(View.VISIBLE);
+
+                        paymentMethodRootLayout= findViewById(R.id.paymentMethodRootLayout);
+                        TextView emptyPaymentMethods = new TextView(getApplication());
+                        emptyPaymentMethods.setText("You don't have any payment methods.");
+                        emptyPaymentMethods.setTextAlignment(View.TEXT_ALIGNMENT_GRAVITY);
+                        emptyPaymentMethods.setTextSize(20);
+                        emptyPaymentMethods.setTextColor(Color.BLACK);
+                        emptyPaymentMethods.setGravity(Gravity.CENTER);
+                        emptyPaymentMethods.setLayoutParams(new Toolbar.LayoutParams(Toolbar.LayoutParams.MATCH_PARENT, Toolbar.LayoutParams.MATCH_PARENT));
+                        paymentMethodRootLayout.addView(emptyPaymentMethods);
+                    }
                 } else {
-                    tokenManager.deleteToken();
-                    startActivity(new Intent(PaymentMethodActivity.this, LoginActivity.class));
-                    finish();
+                    // Ensure activity is not null.
+                    if (getApplicationContext() != null) {
+                        tokenManager.deleteToken();
+                        startActivity(new Intent(PaymentMethodActivity.this, LoginActivity.class));
+                        finish();
+                    }
                 }
             }
 
@@ -303,14 +330,20 @@ public class PaymentMethodActivity extends AppCompatActivity {
             public void onResponse(Call call, Response response) {
                 Log.w(TAG, "onResponse: " + response);
                 if (response.isSuccessful()) {
-                    overridePendingTransition(0, 0);
-                    startActivity(new Intent(PaymentMethodActivity.this, PaymentMethodActivity.class));
-                    overridePendingTransition(0, 0);
-                    finish();
+                    // Ensure activity is not null.
+                    if (getApplicationContext() != null) {
+                        overridePendingTransition(0, 0);
+                        startActivity(new Intent(PaymentMethodActivity.this, PaymentMethodActivity.class));
+                        overridePendingTransition(0, 0);
+                        finish();
+                    }
                 } else {
-                    tokenManager.deleteToken();
-                    startActivity(new Intent(PaymentMethodActivity.this, LoginActivity.class));
-                    finish();
+                    // Ensure activity is not null.
+                    if (getApplicationContext() != null) {
+                        tokenManager.deleteToken();
+                        startActivity(new Intent(PaymentMethodActivity.this, LoginActivity.class));
+                        finish();
+                    }
                 }
             }
 
@@ -425,14 +458,20 @@ public class PaymentMethodActivity extends AppCompatActivity {
             public void onResponse(Call call, Response response) {
                 Log.w(TAG, "onResponse: " + response);
                 if (response.isSuccessful()) {
-                    overridePendingTransition(0, 0);
-                    startActivity(new Intent(PaymentMethodActivity.this, PaymentMethodActivity.class));
-                    overridePendingTransition(0, 0);
-                    finish();
+                    // Ensure activity is not null.
+                    if (getApplicationContext() != null) {
+                        overridePendingTransition(0, 0);
+                        startActivity(new Intent(PaymentMethodActivity.this, PaymentMethodActivity.class));
+                        overridePendingTransition(0, 0);
+                        finish();
+                    }
                 } else {
-                    tokenManager.deleteToken();
-                    startActivity(new Intent(PaymentMethodActivity.this, LoginActivity.class));
-                    finish();
+                    // Ensure activity is not null.
+                    if (getApplicationContext() != null) {
+                        tokenManager.deleteToken();
+                        startActivity(new Intent(PaymentMethodActivity.this, LoginActivity.class));
+                        finish();
+                    }
                 }
             }
 

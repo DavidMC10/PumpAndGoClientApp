@@ -17,7 +17,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.pumpandgo.entities.Setting;
-import com.pumpandgo.entities.UserDetails;
+import com.pumpandgo.entities.UserDetailsResponse;
 import com.pumpandgo.network.ApiService;
 import com.pumpandgo.network.RetrofitBuilder;
 
@@ -32,16 +32,21 @@ import retrofit2.Response;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class SettingsFragment extends Fragment {
+/**
+ * Created by David McElhinney on 14/03/2020.
+ */
 
+public class SettingsFragment extends Fragment {
     private static final String TAG = "SettingsFragment";
+
+    // Declare layout fields.
     private LinearLayout settingsRootLayout;
     private ProgressBar loader;
 
     // Declaration variables.
     ApiService service;
     TokenManager tokenManager;
-    Call<UserDetails> call;
+    Call<UserDetailsResponse> call;
     List<Setting> settingsList;
     ListView listView;
 
@@ -54,12 +59,13 @@ public class SettingsFragment extends Fragment {
 
         ButterKnife.bind(this, view);
 
+        // If no token go to the Login Activity.
         if (tokenManager.getToken() == null) {
             startActivity(new Intent(getActivity(), LoginActivity.class));
             getActivity().finish();
         }
 
-        // Bind view.
+        // View bindings.
         settingsRootLayout = (LinearLayout) view.findViewById(R.id.settingsRootLayout);
         loader = (ProgressBar) view.findViewById(R.id.progressBar);
 
@@ -76,6 +82,7 @@ public class SettingsFragment extends Fragment {
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbarTitle);
         mTitle.setText("Settings");
 
+        // Make Api call.
         getUserProfileDetails();
         return view;
     }
@@ -85,10 +92,10 @@ public class SettingsFragment extends Fragment {
         loader.setVisibility(View.VISIBLE);
         settingsRootLayout.setVisibility(View.INVISIBLE);
         call = service.getUserProfileDetails();
-        call.enqueue(new Callback<UserDetails>() {
+        call.enqueue(new Callback<UserDetailsResponse>() {
 
             @Override
-            public void onResponse(Call<UserDetails> call, Response<UserDetails> response) {
+            public void onResponse(Call<UserDetailsResponse> call, Response<UserDetailsResponse> response) {
                 Log.w(TAG, "onResponse: " + response);
 
                 if (response.isSuccessful()) {
@@ -121,7 +128,7 @@ public class SettingsFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<UserDetails> call, Throwable t) {
+            public void onFailure(Call<UserDetailsResponse> call, Throwable t) {
                 Log.w(TAG, "onFailure: " + t.getMessage());
             }
         });
@@ -163,7 +170,7 @@ public class SettingsFragment extends Fragment {
 
     // Loads the PaymentMethod activity.
     @OnClick(R.id.textViewEdit)
-    public void goToPaymentMethods() {
+    public void goToPaymentMethodsActivity() {
         startActivity(new Intent(getActivity(), PaymentMethodActivity.class));
     }
 }

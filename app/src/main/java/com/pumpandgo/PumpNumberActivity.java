@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.NumberPicker;
@@ -15,14 +14,19 @@ import androidx.appcompat.widget.Toolbar;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import retrofit2.Call;
+
+/**
+ * Created by David McElhinney on 14/03/2020.
+ */
 
 public class PumpNumberActivity extends AppCompatActivity {
     private static final String TAG = "PumpNumberActivity";
-    public static final int LOCATION_REQUEST = 101;
+
+    // Declare layout fields.
     private NumberPicker pumpNumberPicker;
     private Button buttonContinue;
 
+    // Initialise variables.
     int fuelStationId = 0;
     String fuelStationName;
     int numberOfPumps;
@@ -32,16 +36,14 @@ public class PumpNumberActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pumpnumber);
-
         ButterKnife.bind(this);
 
+        // Get data from the previous activity.
         fuelStationId = getIntent().getIntExtra("FUEL_STATION_ID",0);
         fuelStationName = getIntent().getStringExtra("FUEL_STATION_NAME");
         numberOfPumps = getIntent().getIntExtra("NUMBER_OF_PUMPS", 0);
 
-        Log.d("fuwelstat", fuelStationName);
-
-        // View binding.
+        // View bindings.
         pumpNumberPicker = (NumberPicker) findViewById(R.id.pumpNumberNumberPicker);
         pumpNumberPicker.setMinValue(1);
         pumpNumberPicker.setMaxValue(numberOfPumps);
@@ -69,6 +71,7 @@ public class PumpNumberActivity extends AppCompatActivity {
     public void goToFuelAmountActivity() {
         Intent intent = new Intent(this, FuelAmountActivity.class);
         pumpNumber = pumpNumberPicker.getValue();
+        // Send data to the FuelAmountActivity.
         intent.putExtra("FUEL_STATION_ID", fuelStationId);
         intent.putExtra("FUEL_STATION_NAME", fuelStationName);
         intent.putExtra("PUMP_NUMBER", pumpNumber);

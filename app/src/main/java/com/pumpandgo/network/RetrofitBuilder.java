@@ -1,6 +1,5 @@
 package com.pumpandgo.network;
 
-import com.pumpandgo.BuildConfig;
 import com.pumpandgo.TokenManager;
 
 import java.io.IOException;

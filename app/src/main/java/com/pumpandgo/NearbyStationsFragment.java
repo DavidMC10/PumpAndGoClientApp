@@ -38,33 +38,38 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.pumpandgo.entities.FuelStation;
 import com.pumpandgo.entities.FuelStationResponse;
-import com.pumpandgo.entities.UserDetails;
+import com.pumpandgo.entities.UserDetailsResponse;
 import com.pumpandgo.network.ApiService;
 import com.pumpandgo.network.RetrofitBuilder;
 
 import java.util.List;
 
-import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class NearbyStationsFragment extends Fragment {
+/**
+ * Created by David McElhinney on 14/03/2020.
+ */
 
+public class NearbyStationsFragment extends Fragment {
     private static final String TAG = "NearbyStationsFragment";
+
+    // Declare layout fields.
     private RelativeLayout nearbyStationsRootLayout;
     private RecyclerView fuelStationRecyclerView;
     private TextView emptyFuelStations;
     private TextView invalidPermissions;
     private ProgressBar loader;
 
+    // Initialise variables.
     int PERMISSION_ID = 44;
     double latitude;
     double longitude;
 
-    // Declaration variables.
+    // Initialise objects.
     FusedLocationProviderClient mFusedLocationClient;
     ApiService service;
     TokenManager tokenManager;
@@ -81,6 +86,7 @@ public class NearbyStationsFragment extends Fragment {
         service = RetrofitBuilder.createServiceWithAuth(ApiService.class, tokenManager);
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
 
+        // If no token go to the Login Activity.
         if (tokenManager.getToken() == null) {
             startActivity(new Intent(getActivity(), LoginActivity.class));
             getActivity().finish();
@@ -95,11 +101,12 @@ public class NearbyStationsFragment extends Fragment {
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbarTitle);
         mTitle.setText("Nearby Fuel Stations");
 
-        // Bind view.
+        // View bindings.
         fuelStationRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         nearbyStationsRootLayout = (RelativeLayout) view.findViewById(R.id.nearbyStationsRootLayout);
         loader = (ProgressBar) view.findViewById(R.id.progressBar);
 
+        // Create Textview programatically.
         emptyFuelStations = new TextView(getContext());
         emptyFuelStations.setText("There are no fuel stations nearby.");
         emptyFuelStations.setTextAlignment(View.TEXT_ALIGNMENT_GRAVITY);
@@ -110,6 +117,7 @@ public class NearbyStationsFragment extends Fragment {
         nearbyStationsRootLayout.addView(emptyFuelStations);
         emptyFuelStations.setVisibility(View.INVISIBLE);
 
+        // Create Textview programatically.
         invalidPermissions = new TextView(getContext());
         invalidPermissions.setText("Please ensure Location permissions are enabled and GPS is switched on.");
         invalidPermissions.setTextAlignment(View.TEXT_ALIGNMENT_GRAVITY);
@@ -119,21 +127,20 @@ public class NearbyStationsFragment extends Fragment {
         invalidPermissions.setLayoutParams(new Toolbar.LayoutParams(Toolbar.LayoutParams.MATCH_PARENT, Toolbar.LayoutParams.MATCH_PARENT));
         nearbyStationsRootLayout.addView(invalidPermissions);
         invalidPermissions.setVisibility(View.INVISIBLE);
-
         fuelStationRecyclerView.setVisibility(View.VISIBLE);
 
+        // Make Api call.
         getLastLocation();
-
         return view;
     }
 
     // Gets the user's profile details.
     public void getUserProfileDetails() {
         call = service.getUserProfileDetails();
-        call.enqueue(new Callback<UserDetails>() {
+        call.enqueue(new Callback<UserDetailsResponse>() {
 
             @Override
-            public void onResponse(Call<UserDetails> call, Response<UserDetails> response) {
+            public void onResponse(Call<UserDetailsResponse> call, Response<UserDetailsResponse> response) {
                 Log.w(TAG, "onResponse: " + response);
 
                 if (response.isSuccessful()) {
@@ -153,7 +160,7 @@ public class NearbyStationsFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<UserDetails> call, Throwable t) {
+            public void onFailure(Call<UserDetailsResponse> call, Throwable t) {
                 Log.w(TAG, "onFailure: " + t.getMessage());
             }
         });
@@ -176,7 +183,9 @@ public class NearbyStationsFragment extends Fragment {
                         fuelStationRecyclerView.setVisibility(View.VISIBLE);
                         nearbyStationsRootLayout.setVisibility(View.VISIBLE);
                         emptyFuelStations.setVisibility(View.INVISIBLE);
+
                         fuelStationList = response.body().getData();
+
                         // Set Recycler View.
                         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
                         recyclerView.setHasFixedSize(true);

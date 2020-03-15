@@ -9,13 +9,18 @@ import com.pumpandgo.entities.PaymentTest;
 import com.pumpandgo.entities.ReceiptResponse;
 import com.pumpandgo.entities.RewardResponse;
 import com.pumpandgo.entities.TransactionHistoryResponse;
-import com.pumpandgo.entities.UserDetails;
+import com.pumpandgo.entities.TransactionIdResponse;
+import com.pumpandgo.entities.UserDetailsResponse;
 import com.pumpandgo.entities.VisitCountResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
+
+/**
+ * Created by David McElhinney on 14/03/2020.
+ */
 
 public interface ApiService {
 
@@ -49,7 +54,7 @@ public interface ApiService {
     Call<LocatingStationResponse> checkIfAtFuelStation(@Field("latitude") double latitude, @Field("longitude") double longitude);
 
     @POST("getuserprofiledetails")
-    Call<UserDetails> getUserProfileDetails();
+    Call<UserDetailsResponse> getUserProfileDetails();
 
     @POST("getnearbystations")
     @FormUrlEncoded
@@ -108,9 +113,6 @@ public interface ApiService {
     @FormUrlEncoded
     Call<Void> setDefaultPaymentMethod(@Field("default_payment_method") String cardId);
 
-    @POST("post")
-    Call<Void> testSocket();
-
     @POST("retrievepaymentmethods")
     Call<PaymentMethodResponse> getPaymentMethods();
 
@@ -118,6 +120,10 @@ public interface ApiService {
     @FormUrlEncoded
     Call<Void> createCharge(@Field("fuel_amount") int fuelAmount);
 
+    @POST("getrecenttransactionid")
+    Call<TransactionIdResponse> getRecentTransactionId();
+
     @POST("createtransaction")
-    Call<Void> createTransaction();
+    @FormUrlEncoded
+    Call<Void> createTransaction(@Field("fuel_station_id") int fuelStationId, @Field("fuel_amount") int fuelStationAmount, @Field("pump_number") int pumpNumber);
 }

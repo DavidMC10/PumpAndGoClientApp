@@ -4,6 +4,10 @@ import android.content.SharedPreferences;
 
 import com.pumpandgo.entities.AccessToken;
 
+/**
+ * Created by David McElhinney on 02/03/2020.
+ */
+
 public class TokenManager {
 
     private SharedPreferences prefs;

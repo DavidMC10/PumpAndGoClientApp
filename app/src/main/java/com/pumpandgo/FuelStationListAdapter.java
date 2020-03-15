@@ -16,6 +16,10 @@ import com.pumpandgo.entities.FuelStation;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * Created by David McElhinney on 14/03/2020.
+ */
+
 public class FuelStationListAdapter extends RecyclerView.Adapter<FuelStationListAdapter.fuelStationViewHolder> {
 
     // Declaration variables
@@ -75,6 +79,7 @@ public class FuelStationListAdapter extends RecyclerView.Adapter<FuelStationList
 
         public fuelStationViewHolder(View fuelStationView) {
             super(fuelStationView);
+            // Set text views.
             textViewFuelStationName = fuelStationView.findViewById(R.id.textViewFuelStationName);
             textViewDistance = fuelStationView.findViewById(R.id.textViewDistance);
             textViewAddress = fuelStationView.findViewById(R.id.textViewAddress);

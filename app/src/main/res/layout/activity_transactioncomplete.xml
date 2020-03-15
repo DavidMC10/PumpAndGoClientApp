@@ -341,6 +341,18 @@
                     android:textSize="15dp" />
             </LinearLayout>
 
+            <Button
+                android:id="@+id/buttonContinue"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="100dp"
+                android:layout_marginRight="40dp"
+                android:background="@color/colorPrimary"
+                android:fontFamily="@font/open_sans_bold"
+                android:text="RETURN TO HOME"
+                android:textColor="@android:color/white"
+                android:textSize="18sp" />
         </LinearLayout>
     </LinearLayout>
 

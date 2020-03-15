@@ -7,6 +7,7 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,25 +19,25 @@ import com.pumpandgo.entities.ApiError;
 import com.pumpandgo.network.ApiService;
 import com.pumpandgo.network.RetrofitBuilder;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class LoginActivity extends AppCompatActivity {
+/**
+ * Created by David McElhinney on 14/03/2020.
+ */
 
+public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
 
-    // Bind variables from view.
-    @BindView(R.id.editTextEmail)
-    EditText emailText;
-    @BindView(R.id.editTextPassword)
-    EditText passwordText;
-    @BindView(R.id.progressBar)
-    ProgressBar loader;
+    // Declare layout fields.
+    private TextView editTextEmail;
+    private TextView editTextPassword;
+    private ProgressBar loader;
 
+    // Initialise objects.
     ApiService service;
     TokenManager tokenManager;
     AwesomeValidation validator;
@@ -53,18 +54,23 @@ public class LoginActivity extends AppCompatActivity {
         validator = new AwesomeValidation(ValidationStyle.BASIC);
         setupRules();
 
+        // If token is not null load the home activity.
         if (tokenManager.getToken().getAccessToken() != null) {
             startActivity(new Intent(LoginActivity.this, HomeActivity.class));
             finish();
         }
 
+        // View bindings.
+        editTextEmail = (EditText) findViewById(R.id.editTextEmail);
+        editTextPassword = (EditText) findViewById(R.id.editTextPassword);
+        loader = (ProgressBar) findViewById(R.id.progressBar);
     }
 
     // Allows the user to login.
     @OnClick(R.id.buttonSignIn)
     public void login() {
-        String email = emailText.getText().toString();
-        String password = passwordText.getText().toString();
+        String email = editTextEmail.getText().toString();
+        String password = editTextPassword.getText().toString();
 
         if (validator.validate()) {
             loader.setVisibility(View.VISIBLE);
@@ -76,9 +82,12 @@ public class LoginActivity extends AppCompatActivity {
                     Log.w(TAG, "onResponse: " + response);
 
                     if (response.isSuccessful()) {
-                        tokenManager.saveToken(response.body());
-                        startActivity(new Intent(LoginActivity.this, HomeActivity.class));
-                        finish();
+                        // Ensure activity is not null.
+                        if (getApplicationContext() != null) {
+                            tokenManager.saveToken(response.body());
+                            startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                            finish();
+                        }
                     } else {
                         if (response.code() == 422) {
 
@@ -102,7 +111,7 @@ public class LoginActivity extends AppCompatActivity {
 
     // Loads the register activity.
     @OnClick(R.id.textViewRegister)
-    public void goToRegister() {
+    public void goToRegisterActivity() {
         startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
     }
 

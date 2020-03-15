@@ -29,7 +29,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:fontFamily="@font/open_sans_bold"
-                    android:text="Texaco Station and Spar Shop"
+                    android:text="@string/fuelstations_name"
                     android:textColor="@android:color/black"
                     android:textSize="16dp" />
 
@@ -48,7 +48,7 @@
                     android:layout_weight="1"
                     android:layout_marginBottom="6dp"
                     android:fontFamily="@font/open_sans"
-                    android:text="Blanchardtowns Corporate Park Unit Ballycoolin, Dublin 15, Ireland"
+                    android:text="@string/fuelstations_address"
                     android:textColor="@android:color/black"
                     android:textSize="12dp" />
 
@@ -58,7 +58,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/open_sans_bold"
                     android:gravity="right"
-                    android:text="15km"
+                    android:text="@string/fuelstations_distance"
                     android:textColor="@android:color/black"
                     android:textSize="16dp" />
 
@@ -84,7 +84,7 @@
                     android:layout_weight="1"
                     android:fontFamily="@font/open_sans"
                     android:gravity="left"
-                    android:text="Opening Hours"
+                    android:text="@string/fuelstations_opening_hours_title"
                     android:textColor="@android:color/black"
                     android:textSize="16dp" />
 
@@ -95,7 +95,7 @@
                     android:layout_gravity="end"
                     android:fontFamily="@font/open_sans"
                     android:gravity="center"
-                    android:text="6:00am - 12:00pm"
+                    android:text="@string/fuelstations_opening_hours"
                     android:textColor="@android:color/black"
                     android:textSize="15dp" />
             </LinearLayout>

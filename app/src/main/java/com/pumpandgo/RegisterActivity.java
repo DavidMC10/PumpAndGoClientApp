@@ -17,31 +17,28 @@ import com.pumpandgo.entities.AccessToken;
 import com.pumpandgo.network.ApiService;
 import com.pumpandgo.network.RetrofitBuilder;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class RegisterActivity extends AppCompatActivity {
+/**
+ * Created by David McElhinney on 14/02/2020.
+ */
 
+public class RegisterActivity extends AppCompatActivity {
     private static final String TAG = "RegisterActivity";
 
-    @BindView(R.id.editTextFirstname)
-    EditText firstNameText;
-    @BindView(R.id.editTextLastname)
-    EditText lastNameText;
-    @BindView(R.id.editTextEmail)
-    EditText editTextEmail;
-    @BindView(R.id.editTextPassword)
-    EditText editTextPassword;
-    @BindView(R.id.editTextConfirmPassword)
-    EditText editTextConfirmPassword;
-    @BindView(R.id.progressBar)
-    ProgressBar loader;
+    // Declare layout fields.
+    private EditText editTextFirstname;
+    private EditText editTextLastname;
+    private EditText editTextEmail;
+    private EditText editTextPassword;
+    private EditText editTextConfirmPassword;
+    private ProgressBar loader;
 
-    // Declaration variables.
+    // Initialise objects.
     ApiService service;
     Call<AccessToken> call;
     AwesomeValidation validator;
@@ -58,18 +55,27 @@ public class RegisterActivity extends AppCompatActivity {
         tokenManager = TokenManager.getInstance(getSharedPreferences("prefs", MODE_PRIVATE));
         setupRules();
 
+        // View bindings.
+        editTextFirstname = (EditText) findViewById(R.id.editTextFirstname);
+        editTextLastname = (EditText) findViewById(R.id.editTextLastname);
+        editTextEmail = (EditText) findViewById(R.id.editTextEmail);
+        editTextPassword = (EditText) findViewById(R.id.editTextPassword);
+        editTextConfirmPassword = (EditText) findViewById(R.id.editTextConfirmPassword);
+        loader = (ProgressBar) findViewById(R.id.progressBar);
+
+        // If token is not null go to the Home activity.
         if (tokenManager.getToken().getAccessToken() != null) {
-            startActivity(new Intent(RegisterActivity.this, ForgotPasswordActivity.class));
+            startActivity(new Intent(RegisterActivity.this, HomeActivity.class));
             finish();
         }
     }
 
+    // Function that allows the user to register.
     @OnClick(R.id.buttonSignup)
     public void register() {
-
         // Gets the data from the textfields.
-        String firstName = firstNameText.getText().toString();
-        String lastName = lastNameText.getText().toString();
+        String firstName = editTextFirstname.getText().toString();
+        String lastName = editTextLastname.getText().toString();
         String email = editTextEmail.getText().toString();
         String password = editTextPassword.getText().toString();
         String confirmPassword = editTextConfirmPassword.getText().toString();
@@ -84,15 +90,19 @@ public class RegisterActivity extends AppCompatActivity {
                     Log.w(TAG, "onResponse: " + response);
 
                     if (response.isSuccessful()) {
-                        Log.w(TAG, "onResponse: " + response.body());
-                        tokenManager.saveToken(response.body());
-                        startActivity(new Intent(RegisterActivity.this, HomeActivity.class));
-                        finish();
+                        // Ensure activity is not null.
+                        if (getApplicationContext() != null) {
+                            tokenManager.saveToken(response.body());
+                            startActivity(new Intent(RegisterActivity.this, HomeActivity.class));
+                            finish();
+                        }
                     } else {
-                        loader.setVisibility(View.INVISIBLE);
+                        // Ensure activity is not null.
+                        if (getApplicationContext() != null) {
+                            loader.setVisibility(View.INVISIBLE);
+                        }
                     }
                 }
-
                 @Override
                 public void onFailure(Call<AccessToken> call, Throwable t) {
                     Log.w(TAG, "onFailure: " + t.getMessage());
@@ -104,7 +114,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     // Allows the user to go to the login activity.
     @OnClick(R.id.textViewRegister)
-    void goToLogin() {
+    void goToLoginActivity() {
         startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
     }
 

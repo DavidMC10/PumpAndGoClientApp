@@ -31,9 +31,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -56,9 +53,14 @@ import retrofit2.Response;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class PurchaseFuelFragment extends Fragment {
+/**
+ * Created by David McElhinney on 14/03/2020.
+ */
 
+public class PurchaseFuelFragment extends Fragment {
     private static final String TAG = "PurchaseFuelFragment";
+
+    // Declare layout fields.
     private RelativeLayout purchaseFuelRootLayout;
     private LinearLayout purchaseFuelContainer;
     private TextView invalidPermissions;
@@ -70,6 +72,7 @@ public class PurchaseFuelFragment extends Fragment {
     private ImageView imageViewBuyFuel;
     private ProgressBar loader;
 
+    // Initialise variables.
     int PERMISSION_ID = 44;
     int fuelStationId = 0;
     String fuelStationName;
@@ -78,7 +81,7 @@ public class PurchaseFuelFragment extends Fragment {
     double longitude;
     String defaultPaymentMethod;
 
-    // Declaration Variables
+    // Initialise objects.
     FusedLocationProviderClient mFusedLocationClient;
     ApiService service;
     TokenManager tokenManager;
@@ -94,6 +97,12 @@ public class PurchaseFuelFragment extends Fragment {
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
         ButterKnife.bind(this, view);
 
+        // If no token go to the Login Activity.
+        if (tokenManager.getToken() == null) {
+            startActivity(new Intent(getActivity(), LoginActivity.class));
+            getActivity().finish();
+        }
+
         // View binding.
         purchaseFuelRootLayout = (RelativeLayout) view.findViewById(R.id.purchaseFuelRootLayout);
         purchaseFuelContainer = (LinearLayout) view.findViewById(R.id.purchaseFuelContainer);
@@ -105,6 +114,7 @@ public class PurchaseFuelFragment extends Fragment {
         imageViewBuyFuel = (ImageView) view.findViewById(R.id.imageViewBuyFuel);
         loader = (ProgressBar) view.findViewById(R.id.progressBar);
 
+        // Create TextView programatically.
         invalidPermissions = new TextView(getContext());
         invalidPermissions.setText("Please ensure Location permissions are enabled and GPS is switched on.");
         invalidPermissions.setTextAlignment(View.TEXT_ALIGNMENT_GRAVITY);
@@ -113,21 +123,18 @@ public class PurchaseFuelFragment extends Fragment {
         invalidPermissions.setGravity(Gravity.CENTER);
         invalidPermissions.setLayoutParams(new Toolbar.LayoutParams(Toolbar.LayoutParams.MATCH_PARENT, Toolbar.LayoutParams.MATCH_PARENT));
         purchaseFuelRootLayout.addView(invalidPermissions);
-        invalidPermissions.setVisibility(View.INVISIBLE);
 
-        if (tokenManager.getToken() == null) {
-            startActivity(new Intent(getActivity(), LoginActivity.class));
-            getActivity().finish();
-        }
+        // Set views visibility.
+        invalidPermissions.setVisibility(View.INVISIBLE);
         purchaseFuelRootLayout.setVisibility(View.INVISIBLE);
         purchaseFuelContainer.setVisibility(View.INVISIBLE);
 
+        // Make Api call.
         getLastLocation();
-        // Inflates the layout.
         return view;
     }
 
-    // Checks if the user is at a Fuelstation and launches the next activity if so.
+    // Checks if the user is at a Fuelstation.
     public void checkIfAtFuelStation(double latitude, double longitude) {
         loader.setVisibility(View.VISIBLE);
         purchaseFuelContainer.setVisibility(View.INVISIBLE);
@@ -182,22 +189,29 @@ public class PurchaseFuelFragment extends Fragment {
                 Log.w(TAG, "onResponse: " + response);
 
                 if (response.isSuccessful()) {
-                    textViewTitle.setText("Good Afternoon");
-                    textViewFirstName.setText(response.body().getFirstName());
-                    if (response.body().getVisitCount() == 0) {
-                        textViewVisitCount.setText("Congratulations you have unlocked 10% fuel discount on your next fuel purchase.");
-                    } else {
-                        textViewVisitCount.setText(String.valueOf(response.body().getVisitCount()) + " visits to go");
+                    // Ensure activity is not null.
+                    if (getActivity() != null) {
+                        textViewTitle.setText("Good Afternoon");
+                        textViewFirstName.setText(response.body().getFirstName());
+                        if (response.body().getVisitCount() == 0) {
+                            textViewVisitCount.setText("Congratulations you have unlocked 15% fuel discount on this fuel purchase.");
+                            textViewEndingText.setVisibility(View.INVISIBLE);
+                        } else {
+                            textViewVisitCount.setText(String.valueOf(response.body().getVisitCount()) + " visits to go");
+                            textViewEndingText.setVisibility(View.VISIBLE);
+                        }
+                        textViewEndingText.setText("to unlock your fuel reward");
+                        getDefaultPaymentMethod();
                     }
-                    textViewEndingText.setText("to unlock your fuel reward");
-                    getDefaultPaymentMethod();
                 } else {
-                    tokenManager.deleteToken();
-                    startActivity(new Intent(getActivity(), LoginActivity.class));
-                    getActivity().finish();
+                    // Ensure activity is not null.
+                    if (getActivity() != null) {
+                        tokenManager.deleteToken();
+                        startActivity(new Intent(getActivity(), LoginActivity.class));
+                        getActivity().finish();
+                    }
                 }
             }
-
             @Override
             public void onFailure(Call<VisitCountResponse> call, Throwable t) {
                 Log.w(TAG, "onFailure: " + t.getMessage());
@@ -213,18 +227,27 @@ public class PurchaseFuelFragment extends Fragment {
             public void onResponse(Call<DefaultPaymentMethodResponse> call, Response<DefaultPaymentMethodResponse> response) {
                 Log.w(TAG, "onResponse: " + response);
                 if (response.isSuccessful()) {
-                    defaultPaymentMethod = response.body().getCardId();
-                    loader.setVisibility(View.INVISIBLE);
-                    purchaseFuelRootLayout.setVisibility(View.VISIBLE);
-                    purchaseFuelContainer.setVisibility(View.VISIBLE);
+                    // Ensure activity is not null.
+                    if (getActivity() != null) {
+                        defaultPaymentMethod = response.body().getCardId();
+                        loader.setVisibility(View.INVISIBLE);
+                        purchaseFuelRootLayout.setVisibility(View.VISIBLE);
+                        purchaseFuelContainer.setVisibility(View.VISIBLE);
+                    }
                 } else if (response.code() == 404) {
-                    loader.setVisibility(View.INVISIBLE);
-                    purchaseFuelRootLayout.setVisibility(View.VISIBLE);
-                    purchaseFuelContainer.setVisibility(View.VISIBLE);
+                    // Ensure activity is not null.
+                    if (getActivity() != null) {
+                        loader.setVisibility(View.INVISIBLE);
+                        purchaseFuelRootLayout.setVisibility(View.VISIBLE);
+                        purchaseFuelContainer.setVisibility(View.VISIBLE);
+                    }
                 } else {
-                    tokenManager.deleteToken();
-                    startActivity(new Intent(getActivity(), LoginActivity.class));
-                    getActivity().finish();
+                    // Ensure activity is not null.
+                    if (getActivity() != null) {
+                        tokenManager.deleteToken();
+                        startActivity(new Intent(getActivity(), LoginActivity.class));
+                        getActivity().finish();
+                    }
                 }
             }
 
@@ -257,7 +280,10 @@ public class PurchaseFuelFragment extends Fragment {
                 Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
                 positiveButton.setTextColor(getContext().getResources().getColor(R.color.colorPrimary));
             } else {
+                // Load the PumpNumberActivity if the user is at a fuel station.
                 Intent intent = new Intent(getContext(), PumpNumberActivity.class);
+
+                // Pass data to the PumpNumberActivity.
                 intent.putExtra("FUEL_STATION_ID", fuelStationId);
                 intent.putExtra("FUEL_STATION_NAME", fuelStationName);
                 intent.putExtra("NUMBER_OF_PUMPS", numberOfPumps);

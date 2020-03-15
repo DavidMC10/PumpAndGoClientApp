@@ -45,12 +45,14 @@ public class SettingsListAdapter extends ArrayAdapter<Setting> {
 
     private static final String TAG = "SettingsListAdapter";
 
-    // Declaration variables.
+    // Initialise objects.
     Call call;
     ApiService service;
     TokenManager tokenManager;
     List<Setting> settingsList;
     Context context;
+
+    // Declare variable.
     int resource;
 
     // Constructor initialising the values.

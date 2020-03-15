@@ -14,6 +14,10 @@ import com.pumpandgo.entities.TransactionHistory;
 
 import java.util.List;
 
+/**
+ * Created by David McElhinney on 14/03/2020.
+ */
+
 public class TransactionHistoryListAdapter extends RecyclerView.Adapter<TransactionHistoryListAdapter.transactionHistoryViewHolder> {
 
     // Declaration variables
