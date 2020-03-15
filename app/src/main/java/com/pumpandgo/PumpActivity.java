@@ -115,6 +115,8 @@ public class PumpActivity extends AppCompatActivity {
                 if (pumpData.equals("finished") == false) {
                     updateCurrentFuelAmount("€" + pumpData);
                 } else {
+                    pusher.unsubscribe("fuel_pump");
+                    pusher.disconnect();
                     startActivity(new Intent(PumpActivity.this, TransactionCompleteActivity.class));
                     finish();
                 }
