@@ -74,7 +74,7 @@ public class LoginActivity extends AppCompatActivity {
 
         if (validator.validate()) {
             loader.setVisibility(View.VISIBLE);
-            call = service.login(email, password);
+            call = service.login(email.toLowerCase(), password);
             call.enqueue(new Callback<AccessToken>() {
                 @Override
                 public void onResponse(Call<AccessToken> call, Response<AccessToken> response) {
@@ -111,6 +111,12 @@ public class LoginActivity extends AppCompatActivity {
 
     // Loads the register activity.
     @OnClick(R.id.textViewRegister)
+    public void goToForgotPasswordActivity() {
+        startActivity(new Intent(LoginActivity.this, ForgotPasswordActivity.class));
+    }
+
+    // Loads the register activity.
+    @OnClick(R.id.textViewForgetPassword)
     public void goToRegisterActivity() {
         startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
     }

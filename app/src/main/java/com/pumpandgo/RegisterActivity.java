@@ -7,6 +7,7 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -82,7 +83,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         if (validator.validate()) {
             loader.setVisibility(View.VISIBLE);
-            call = service.register(firstName, lastName, email, password);
+            call = service.register(firstName, lastName, email.toLowerCase(), password);
             call.enqueue(new Callback<AccessToken>() {
                 @Override
                 public void onResponse(Call<AccessToken> call, Response<AccessToken> response) {
@@ -96,6 +97,8 @@ public class RegisterActivity extends AppCompatActivity {
                             startActivity(new Intent(RegisterActivity.this, HomeActivity.class));
                             finish();
                         }
+                    } else if (response.code() == 422) {
+                        Toast.makeText(getApplicationContext(), "The email has already been taken.", Toast.LENGTH_LONG).show();
                     } else {
                         // Ensure activity is not null.
                         if (getApplicationContext() != null) {

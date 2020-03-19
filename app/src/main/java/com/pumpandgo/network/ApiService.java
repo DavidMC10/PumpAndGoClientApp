@@ -39,6 +39,10 @@ public interface ApiService {
     @FormUrlEncoded
     Call<AccessToken> refresh(@Field("refresh_token") String refreshToken);
 
+    @POST("createpasswordresettoken")
+    @FormUrlEncoded
+    Call<Void> sendPasswordResetEmail(@Field("email") String email);
+
     @POST("visitcount")
     Call<VisitCountResponse> visitCount();
 
