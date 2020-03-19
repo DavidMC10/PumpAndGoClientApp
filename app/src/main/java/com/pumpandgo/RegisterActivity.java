@@ -114,13 +114,6 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-
-    // Allows the user to go to the login activity.
-    @OnClick(R.id.textViewRegister)
-    void goToLoginActivity() {
-        startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
-    }
-
     // Sets validation rules.
     public void setupRules() {
         validator.addValidation(this, R.id.editTextFirstname, RegexTemplate.NOT_EMPTY, R.string.err_name);

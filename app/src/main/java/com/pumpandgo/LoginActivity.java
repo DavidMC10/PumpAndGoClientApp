@@ -110,13 +110,13 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     // Loads the register activity.
-    @OnClick(R.id.textViewRegister)
+    @OnClick(R.id.textViewForgetPassword)
     public void goToForgotPasswordActivity() {
         startActivity(new Intent(LoginActivity.this, ForgotPasswordActivity.class));
     }
 
     // Loads the register activity.
-    @OnClick(R.id.textViewForgetPassword)
+    @OnClick(R.id.textViewRegister)
     public void goToRegisterActivity() {
         startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
     }
