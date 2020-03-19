@@ -53,7 +53,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     }
 
 
-    // Loads the register activity.
+    // Sends the user a password reset link.
     @OnClick(R.id.buttonResetPassword)
     public void sendPasswordResetLink() {
         String email = editTextEmail.getText().toString();
