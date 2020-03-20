@@ -99,4 +99,11 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
             call = null;
         }
     }
+
+    // Close app on back pressed.
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finishAffinity(); // or finish();
+    }
 }
