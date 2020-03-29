@@ -3,6 +3,9 @@ package com.pumpandgo;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,8 +35,10 @@ public class PumpActivity extends AppCompatActivity {
     private static final String TAG = "PumpActivity";
 
     // Declare layout fields.
+    private LinearLayout pumpingRootLayout;
     private TextView textViewPumpNumber;
     private TextView textViewFuelAmount;
+    private ProgressBar loader;
 
     // Initialise variables.
     private int fuelStationId;
@@ -147,7 +152,7 @@ public class PumpActivity extends AppCompatActivity {
                 Log.w(TAG, "onResponse: " + response);
 
                 if (response.isSuccessful()) {
-                    // Do nothing.
+                    // Do nothing
                 } else {
                     // Ensure activity is not null.
                     if (getApplicationContext() != null) {

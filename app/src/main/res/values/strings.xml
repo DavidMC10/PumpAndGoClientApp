@@ -31,6 +31,7 @@
     <string name="pumping_fuelling_title">Now Fuelling</string>
     <string name="pumping_pump_title">Pump</string>
     <string name="pumping_pump_number_title">4</string>
+    <string name="pumping_fuel_amount_title">€0.00</string>
     <string name="pumping_warning_message">Please leave your phone in the vehicle while fuelling</string>
 
     <!--activity_receipt strings-->

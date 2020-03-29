@@ -10,6 +10,7 @@
         android:layout_height="wrap_content" />
 
     <LinearLayout
+        android:id="@+id/pumpingRootLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="40dp"
@@ -31,7 +32,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="40dp"
-            android:layout_marginTop="80dp"
+            android:layout_marginTop="100dp"
             android:layout_marginRight="40dp"
             android:orientation="vertical">
 
@@ -81,6 +82,7 @@
                 android:layout_alignBottom="@id/pumpCircle"
                 android:fontFamily="@font/open_sans_bold"
                 android:gravity="center"
+                android:text="@string/pumping_fuel_amount_title"
                 android:textColor="@color/colorAccent"
                 android:textSize="26sp" />
         </RelativeLayout>
