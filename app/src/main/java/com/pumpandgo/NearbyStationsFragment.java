@@ -136,6 +136,8 @@ public class NearbyStationsFragment extends Fragment {
 
     // Gets the user's profile details.
     public void getUserProfileDetails() {
+        loader.setVisibility(View.VISIBLE);
+        nearbyStationsRootLayout.setVisibility(View.INVISIBLE);
         call = service.getUserProfileDetails();
         call.enqueue(new Callback<UserDetailsResponse>() {
 
@@ -168,8 +170,6 @@ public class NearbyStationsFragment extends Fragment {
 
     // Get fuel stations nearby.
     public void getNearbyFuelStations(int maxDistanceLimit) {
-        loader.setVisibility(View.VISIBLE);
-        nearbyStationsRootLayout.setVisibility(View.INVISIBLE);
         call = service.getNearbyStations(latitude, longitude, maxDistanceLimit);
         call.enqueue(new Callback<FuelStationResponse>() {
             @Override

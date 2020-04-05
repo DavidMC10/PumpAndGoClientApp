@@ -1,5 +1,6 @@
 package com.pumpandgo;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Patterns;
@@ -88,5 +89,11 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     // Sets validation rules.
     public void setupRules() {
         validator.addValidation(this, R.id.editTextEmail, Patterns.EMAIL_ADDRESS, R.string.err_email);
+    }
+
+    // Go to LoginActivity on back pressed.
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(ForgotPasswordActivity.this, LoginActivity.class));
     }
 }

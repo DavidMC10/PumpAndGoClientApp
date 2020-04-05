@@ -46,6 +46,7 @@ public class FuelAmountActivity extends AppCompatActivity {
     private int fuelStationId;
     private String fuelStationName;
     private int fuelAmount;
+
     private int pumpNumber;
 
     // Initialise objects.
