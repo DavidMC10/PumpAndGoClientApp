@@ -13,6 +13,9 @@ public class LocatingStationResponse {
     @Json(name = "number_of_pumps")
     int numberOfPumps;
 
+    @Json(name = "channel_id")
+    int channelId;
+
     public int getFuelStationId() {
         return fuelStationId;
     }
@@ -25,6 +28,10 @@ public class LocatingStationResponse {
         return numberOfPumps;
     }
 
+    public int getChannelId() {
+        return channelId;
+    }
+
     public void setFuelStationId(int fuelStationId) {
         this.fuelStationId = fuelStationId;
     }
@@ -35,5 +42,9 @@ public class LocatingStationResponse {
 
     public void setNumberOfPumps(int numberOfPumps) {
         this.numberOfPumps = numberOfPumps;
+    }
+
+    public void setChannelId(int channelId) {
+        this.channelId = channelId;
     }
 }

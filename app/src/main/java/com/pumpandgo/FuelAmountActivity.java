@@ -43,10 +43,10 @@ public class FuelAmountActivity extends AppCompatActivity {
     // Initialise variables.
     private String defaultPaymentMethod;
     private String[] numberPickerArray;
+    private int channelId;
     private int fuelStationId;
     private String fuelStationName;
     private int fuelAmount;
-
     private int pumpNumber;
 
     // Initialise objects.
@@ -70,6 +70,7 @@ public class FuelAmountActivity extends AppCompatActivity {
         }
 
         // Get data from previous activity.
+        channelId = getIntent().getIntExtra("CHANNEL_ID", 0);
         fuelStationId = getIntent().getIntExtra("FUEL_STATION_ID", 0);
         fuelStationName = getIntent().getStringExtra("FUEL_STATION_NAME");
         pumpNumber = getIntent().getIntExtra("PUMP_NUMBER", 0);
@@ -178,6 +179,7 @@ public class FuelAmountActivity extends AppCompatActivity {
                         loader.setVisibility(View.INVISIBLE);
                         Intent intent = new Intent(getApplication(), PumpActivity.class);
                         // Send data to the PumpActivity.
+                        intent.putExtra("CHANNEL_ID", channelId);
                         intent.putExtra("FUEL_STATION_ID", fuelStationId);
                         intent.putExtra("FUEL_AMOUNT", fuelAmount);
                         intent.putExtra("FUEL_STATION_NAME", fuelStationName);

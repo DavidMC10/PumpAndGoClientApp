@@ -3,7 +3,6 @@ package com.pumpandgo;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -45,6 +44,7 @@ public class PumpActivity extends AppCompatActivity {
     private String fuelStationName;
     private int fuelAmount;
     private int pumpNumber;
+    private int channelId;
 
     // Initialise objects.
     ApiService service;
@@ -71,6 +71,7 @@ public class PumpActivity extends AppCompatActivity {
         fuelStationName = getIntent().getStringExtra("FUEL_STATION_NAME");
         fuelAmount = getIntent().getIntExtra("FUEL_AMOUNT", 0);
         pumpNumber = getIntent().getIntExtra("PUMP_NUMBER", 0);
+        channelId = getIntent().getIntExtra("CHANNEL_ID", 0);
 
         // View bindings.
         textViewFuelAmount = (TextView) findViewById(R.id.textViewFuelAmount);
@@ -85,7 +86,6 @@ public class PumpActivity extends AppCompatActivity {
         // Get access to the custom title view.
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbarTitle);
         mTitle.setText(fuelStationName);
-
 
         // Set pusher details.
         PusherOptions options = new PusherOptions();
@@ -111,16 +111,16 @@ public class PumpActivity extends AppCompatActivity {
         }, ConnectionState.ALL);
 
         // Get the websocket data from the fuel_pump channel.
-        Channel channel = pusher.subscribe("fuel_pump");
+        Channel channel = pusher.subscribe("channelId." + channelId);
         channel.bind("pumping", new SubscriptionEventListener() {
             @Override
             public void onEvent(PusherEvent event) {
                 String pumpData = event.getData();
-                pumpData = pumpData.substring(22, pumpData.length() - 2);
+                pumpData = pumpData.substring(22, pumpData.length() - 23);
                 if (pumpData.equals("finished") == false) {
                     updateCurrentFuelAmount("€" + pumpData);
                 } else {
-                    pusher.unsubscribe("fuel_pump");
+                    pusher.unsubscribe("channelId." + channelId);
                     pusher.disconnect();
                     startActivity(new Intent(PumpActivity.this, TransactionCompleteActivity.class));
                     finish();

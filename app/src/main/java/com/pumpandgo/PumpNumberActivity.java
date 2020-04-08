@@ -31,6 +31,7 @@ public class PumpNumberActivity extends AppCompatActivity {
     String fuelStationName;
     int numberOfPumps;
     int pumpNumber;
+    int channelId = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,6 +43,7 @@ public class PumpNumberActivity extends AppCompatActivity {
         fuelStationId = getIntent().getIntExtra("FUEL_STATION_ID",0);
         fuelStationName = getIntent().getStringExtra("FUEL_STATION_NAME");
         numberOfPumps = getIntent().getIntExtra("NUMBER_OF_PUMPS", 0);
+        channelId = getIntent().getIntExtra("CHANNEL_ID",0);
 
         // View bindings.
         pumpNumberPicker = (NumberPicker) findViewById(R.id.pumpNumberNumberPicker);
@@ -75,6 +77,7 @@ public class PumpNumberActivity extends AppCompatActivity {
         intent.putExtra("FUEL_STATION_ID", fuelStationId);
         intent.putExtra("FUEL_STATION_NAME", fuelStationName);
         intent.putExtra("PUMP_NUMBER", pumpNumber);
+        intent.putExtra("CHANNEL_ID", channelId);
         startActivity(intent);
     }
 

@@ -97,7 +97,6 @@ public class PaymentMethodActivity extends AppCompatActivity {
         getDefaultPaymentMethod();
     }
 
-
     // Gets the user's default payment method.
     public void getDefaultPaymentMethod() {
         call = service.getDefaultPaymentMethod();

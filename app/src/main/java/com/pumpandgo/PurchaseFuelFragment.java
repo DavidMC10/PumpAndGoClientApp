@@ -77,6 +77,7 @@ public class PurchaseFuelFragment extends Fragment {
     int fuelStationId = 0;
     String fuelStationName;
     int numberOfPumps;
+    int channelId = 0;
     double latitude;
     double longitude;
     String defaultPaymentMethod;
@@ -148,6 +149,7 @@ public class PurchaseFuelFragment extends Fragment {
                 if (response.isSuccessful()) {
                     // Ensure activity is not null.
                     if (getActivity() != null) {
+                        channelId = response.body().getChannelId();
                         fuelStationId = response.body().getFuelStationId();
                         fuelStationName = response.body().getFuelStationName();
                         numberOfPumps = response.body().getNumberOfPumps();
@@ -287,6 +289,7 @@ public class PurchaseFuelFragment extends Fragment {
                 intent.putExtra("FUEL_STATION_ID", fuelStationId);
                 intent.putExtra("FUEL_STATION_NAME", fuelStationName);
                 intent.putExtra("NUMBER_OF_PUMPS", numberOfPumps);
+                intent.putExtra("CHANNEL_ID", channelId);
                 getContext().startActivity(intent);
             }
         } else {
