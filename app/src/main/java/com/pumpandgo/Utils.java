@@ -10,7 +10,10 @@ import okhttp3.ResponseBody;
 import retrofit2.Converter;
 
 /**
- * Created by David McElhinney on 14/03/2020.
+ * Title: Utils
+ * Author: ProgrammationAndroid
+ * Date: 22/06/2017
+ * Availability: https://github.com/ProgrammationAndroid/Laravel-Passport-Android/blob/master/android/app/src/main/java/test/tuto_passport/Utils.java
  */
 
 public class Utils {

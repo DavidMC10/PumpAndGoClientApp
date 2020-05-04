@@ -4,6 +4,13 @@ import android.content.SharedPreferences;
 
 import com.pumpandgo.entities.AccessToken;
 
+/**
+ * Title: TokenManager
+ * Author: ProgrammationAndroid
+ * Date: 22/06/2017
+ * Availability: https://github.com/ProgrammationAndroid/Laravel-Passport-Android/blob/master/android/app/src/main/java/test/tuto_passport/TokenManager.java
+ */
+
 public class TokenManager {
 
     private SharedPreferences prefs;

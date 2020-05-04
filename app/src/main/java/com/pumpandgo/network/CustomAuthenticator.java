@@ -13,6 +13,13 @@ import okhttp3.Response;
 import okhttp3.Route;
 import retrofit2.Call;
 
+/**
+ * Title: CustomAuthenticator
+ * Author: ProgrammationAndroid
+ * Date: 22/06/2017
+ * Availability: https://github.com/ProgrammationAndroid/Laravel-Passport-Android/blob/master/android/app/src/main/java/test/tuto_passport/network/CustomAuthenticator.java
+ */
+
 public class CustomAuthenticator implements Authenticator {
 
     private TokenManager tokenManager;

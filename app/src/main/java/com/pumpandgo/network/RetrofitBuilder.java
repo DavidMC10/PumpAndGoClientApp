@@ -11,6 +11,13 @@ import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.moshi.MoshiConverterFactory;
 
+/**
+ * Title: RetrofitBuilder
+ * Author: ProgrammationAndroid
+ * Date: 22/06/2017
+ * Availability: https://github.com/ProgrammationAndroid/Laravel-Passport-Android/blob/master/android/app/src/main/java/test/tuto_passport/network/RetrofitBuilder.java
+ */
+
 public class RetrofitBuilder {
 
     private static final String BASE_URL = "https://pumpandgo.net/api/";

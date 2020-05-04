@@ -49,10 +49,6 @@ public interface ApiService {
     @POST("getrewards")
     Call<RewardResponse> getRewards();
 
-    @POST("testing")
-    @FormUrlEncoded
-    Call<PaymentTest> paymentTest(@Field("token_id") String token_id);
-
     @POST("getcurrentstation")
     @FormUrlEncoded
     Call<LocatingStationResponse> checkIfAtFuelStation(@Field("latitude") double latitude, @Field("longitude") double longitude);
@@ -129,5 +125,5 @@ public interface ApiService {
 
     @POST("createtransaction")
     @FormUrlEncoded
-    Call<Void> createTransaction(@Field("fuel_station_id") int fuelStationId, @Field("fuel_amount") int fuelStationAmount, @Field("pump_number") int pumpNumber);
+    Call<Void> createTransaction(@Field("fuel_station_id") int fuelStationId, @Field("fuel_amount") int fuelAmount, @Field("pump_number") int pumpNumber);
 }
