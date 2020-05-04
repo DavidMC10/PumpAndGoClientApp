@@ -51,7 +51,12 @@ import retrofit2.Response;
 import static android.content.Context.MODE_PRIVATE;
 
 /**
- * Created by David McElhinney on 14/03/2020.
+ * Author of the original code: Ferdousur Rahman Sarker
+ * Author of the refactored code: David McElhinney
+ * Date: 14/03/2020
+ * Note: The code to obtain the location is from Ferdousur Rahman Sarker. Minor refactoring was required to enable it to function in my project.
+ * The code in this class that does not have anything to do with obtaining a location is my own code.
+ * Availability: https://www.androdocs.com/java/getting-current-location-latitude-longitude-in-android-using-java.html
  */
 
 public class NearbyStationsFragment extends Fragment {
